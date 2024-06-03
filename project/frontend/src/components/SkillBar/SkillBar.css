@@ -1,0 +1,88 @@
+.container {
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    background-color: #ecf0f1;
+    margin: 10px 0px;
+    padding: 10px 10px;
+    border-radius: 7px;
+    z-index: -1;
+    /* -webkit-box-shadow: 11px 10px 19px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 11px 10px 19px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 11px 10px 19px 0px rgba(0, 0, 0, 0.75); */
+  }
+  .title-text {
+    text-align: start;
+    background-color: #341f97;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 50px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+  }
+  .container .skill-box {
+    width: 100%;
+    margin: 25px 0;
+  }
+  .skill-box .title {
+    display: flex;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .skill-box .skill-bar {
+    height: 8px;
+    width: 100%;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .skill-box .skill-per {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 95%;
+    border-radius: 6px;
+    background: #341f97;
+    animation: progress 0.4s ease-in-out forwards;
+    opacity: 0;
+  }
+  .skill-per.css {
+    width: 60%;
+    animation-delay: 0.1s;
+  }
+  .skill-per.javascript {
+    width: 50%;
+    animation-delay: 0.2s;
+  }
+  
+  .skill-per.nodejs {
+    width: 70%;
+    animation-delay: 0.3s;
+  }
+  .skill-per.react {
+    width: 70%;
+    animation-delay: 0.4s;
+  }
+  @keyframes progress {
+    0% {
+      width: 0;
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .skill-per .tooltip {
+    position: absolute;
+    left: -14px;
+    top: -28px;
+    font-size: 9px;
+    font-weight: 500;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background-color: #341f97;
+  }
+
+  
