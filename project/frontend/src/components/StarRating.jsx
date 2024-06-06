@@ -6,7 +6,7 @@ const StarRating = ({ rate }) => {
 
   for (let i = 1; i <= 5; i++) {
     if (i <= rate) {
-      stars.push(<FaStar className="text-customOne" key={i} />);
+      stars.push(<FaStar className="text-customOne text-sm" key={i} />);
     } else {
       stars.push(<PiStarThin key={i} />);
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Botton from "./Botton";
 export default function SectionHeader({ title, desc, btnTitle }) {
   return (
@@ -14,8 +15,10 @@ export default function SectionHeader({ title, desc, btnTitle }) {
       <div>
         {btnTitle ? (
           <Botton>
-            تمامی دوره ها
-            <FaArrowLeft />
+            <Link className="flex gap-1 items-center" to="/coursesall">
+              تمامی دوره ها
+              <FaArrowLeft />
+            </Link>
           </Botton>
         ) : null}
       </div>

@@ -10,3 +10,14 @@
 .rtl {
   direction: rtl;
 }
+
+.paginatinBttns a {
+  padding: 13px;
+  background: #341f97;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.paginatinBttns a:hover {
+  background: #5f27cd;
+}

@@ -18,7 +18,7 @@ export default function ActiveSwiper({ dataSwiper }) {
   const [data, setData] = useState(dataSwiper);
   console.log(data);
   return (
-    <div className=" flex justify-center items-center h-[60vh] m-8">
+    <div className=" flex justify-center items-center h-[75vh] m-8">
       <Swiper
         breakpoints={{
           340: {
