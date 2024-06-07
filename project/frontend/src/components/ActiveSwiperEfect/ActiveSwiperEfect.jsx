@@ -11,10 +11,12 @@ import "swiper/css/pagination";
 
 import "../ActiveSwiperEfect/ActiveSwiperEfect.css";
 import StarRating from "../StarRating";
-
+import CircleSpinner from "../CircleSpinner/CircleSpinner";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 export default function ActiveSwiperEfect({ dataSwiper }) {
   const [data, setData] = useState(dataSwiper);
+  const [isLoaderShow, setIsLoaderShow] = useState(false);
+  const inImageLoaded = () => setIsLoaderShow(true);
   return (
     <>
       <Swiper
@@ -35,7 +37,8 @@ export default function ActiveSwiperEfect({ dataSwiper }) {
       >
         {data.map((item) => (
           <SwiperSlide>
-            <img src={item.img} />
+            <img src={item.img} onLoad={inImageLoaded} />
+            {!isLoaderShow && <CircleSpinner />}
             <div className="flex flex-col bg-grey gap-2 w-full h-full rtl p-3">
               <h1 className="self-start text-md font-bold">{item.nameC}</h1>
               <div className="flex justify-between w-[90%] mx-auto mt-2">
