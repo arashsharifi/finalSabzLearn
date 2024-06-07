@@ -5,6 +5,7 @@ import Index from "./pages/Index";
 import CoursesAll from "./pages/CoursesAll/CoursesAll";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import TestReduser from "./TestReduser/TestReduser";
 const routes = [
   { path: "/", element: <Index /> },
   { path: "/course-info/:courseName", element: <CourseInfo /> },
@@ -13,6 +14,7 @@ const routes = [
   { path: "/coursesall", element: <CoursesAll /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
+  { path: "/test", element: <TestReduser /> },
 ];
 
 export default routes;
