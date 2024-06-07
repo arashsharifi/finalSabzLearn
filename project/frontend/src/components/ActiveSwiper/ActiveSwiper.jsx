@@ -13,9 +13,12 @@ import "../ActiveSwiper/ActiveSwiper.css";
 // import required modules
 import { Pagination } from "swiper/modules";
 import StarRating from "../StarRating";
+import CircleSpinner from "../CircleSpinner/CircleSpinner";
 
 export default function ActiveSwiper({ dataSwiper }) {
   const [data, setData] = useState(dataSwiper);
+  const [isLoaderShow, setIsLoaderShow] = useState(false);
+  const inImageLoaded = () => setIsLoaderShow(true);
   console.log(data);
   return (
     <div className=" flex justify-center items-center h-[75vh] m-8">
@@ -39,7 +42,13 @@ export default function ActiveSwiper({ dataSwiper }) {
         {data.map((item) => (
           <SwiperSlide key={item.id}>
             <div className="w-full h-[60%] md:h-[50%] mx-auto overflow-hidden ">
-              <img className="w-full h-full " src={item.img} alt="noot" />
+              <img
+                className="w-full h-full "
+                src={item.img}
+                alt="noot"
+                onLoad={inImageLoaded}
+              />
+              {!isLoaderShow && <CircleSpinner />}
             </div>
             <div className="flex flex-col justify-between bg-grey shadow-lg w-full p-2 rtl h-[50%] md:h-[50%]">
               <h1 className="self-start text-md">{item.nameC}</h1>

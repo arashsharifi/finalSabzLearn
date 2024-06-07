@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUsersLine } from "react-icons/fa6";
 import { PiStarThin } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
-
+import CircleSpinner from "./CircleSpinner/CircleSpinner";
 import ButtonCustomOne from "./ButtonCustomOne";
 import StarRating from "./StarRating";
+
 export default function CourseBox({
   id,
   img,
@@ -14,13 +15,31 @@ export default function CourseBox({
   countStudent,
   price,
 }) {
+  const [isLoaderShow, setIsLoaderShow] = useState(false);
+  const inImageLoaded = () => setIsLoaderShow(true);
   return (
     <div
       key={id}
       className="bg-myWhite w-full  md:w-[85%] flex flex-col gap-2 p-4 rounded-lg duration-300 hover:shadow-custom"
     >
       <div className="w-[98%]  mx-auto rounded-lg z-20">
-        <img className="w-full h-full rounded-lg" src={img} alt="nooot" />
+        <img
+          className="w-full h-full rounded-lg"
+          src={img}
+          alt="nooot"
+          onLoad={inImageLoaded}
+        />
+        {!isLoaderShow && <CircleSpinner />}
+        {/* {isLoaderShow ? (
+          <img
+            className="w-full h-full rounded-lg"
+            src={img}
+            alt="nooot"
+            onLoad={inImageLoaded}
+          />
+        ) : (
+          <CircleSpinner />
+        )} */}
       </div>
 
       <div className="flex flex-col gap-3 pr-4">

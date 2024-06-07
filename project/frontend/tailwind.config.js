@@ -15,6 +15,7 @@ export default {
       grey: "#ecf0f1",
       greydark: "#bdc3c7",
       greydarko: "#95afc0",
+      greydoubledarko: "#7E7E86",
       myWhite: "#ffffff",
       black: "#000000",
       greenyavash: "#00BB3A",

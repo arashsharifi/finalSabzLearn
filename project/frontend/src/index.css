@@ -21,3 +21,29 @@
 .paginatinBttns a:hover {
   background: #5f27cd;
 }
+
+.LoginRegisterContainer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.LoginRegisterContainer::before {
+  content: "";
+  position: absolute;
+  top: -5rem;
+  width: 150%;
+  height: 380px;
+  background-color: #5f27cd;
+  z-index: -1;
+  transform: rotate(-4deg);
+}
+.LoginRegisterContainer::after {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 380px;
+  background-color: #341f97;
+  z-index: -9999;
+  transform: rotate(-4deg);
+}
