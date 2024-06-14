@@ -20,6 +20,8 @@ export default {
       black: "#000000",
       greenyavash: "#00BB3A",
       greentoond: "#10982A",
+      success: "#00BB3A",
+      error: "#F44336",
     },
     extend: {
       fontFamily: {

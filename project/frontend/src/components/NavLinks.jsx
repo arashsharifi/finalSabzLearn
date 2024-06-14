@@ -67,7 +67,7 @@ export default function NavLinks() {
               {link.submenu && (
                 <div>
                   {link.sublinks.map((myslinks) => (
-                    <div>
+                    <div key={myslinks.id}>
                       <h3
                         onClick={() =>
                           subHeading !== myslinks.Head
