@@ -6,8 +6,13 @@ import InputTextArea from "../components/UI/InputTextArea";
 import { Link } from "react-router-dom";
 
 import { PiMaskHappyDuotone } from "react-icons/pi";
+import ButtonViget from "../components/UI/ButtonViget";
 
 export default function Login() {
+  const submitLoginHandler = (e) => {
+    e.preventDefault();
+    console.log("login");
+  };
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -47,9 +52,13 @@ export default function Login() {
                   icons="lock"
                   placeholder="رمز عبور"
                 />
-                <button className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md">
-                  ورود
-                </button>
+                <ButtonViget
+                  className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md"
+                  type="submit"
+                  onclick={submitLoginHandler}
+                >
+                  <p>ورود</p>
+                </ButtonViget>
                 <div className="flex w-[95%]  mx-auto justify-between p-2 items-center">
                   <div className="flex items-center ">
                     <input
