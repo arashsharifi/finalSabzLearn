@@ -6,7 +6,13 @@ import { PiMaskHappyDuotone } from "react-icons/pi";
 
 import { Link } from "react-router-dom";
 import InputTextArea from "../components/UI/InputTextArea";
+import ButtonViget from "../components/UI/ButtonViget";
+
 export default function Register() {
+  const registaerSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log("register");
+  };
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -54,9 +60,15 @@ export default function Register() {
                   icons="lock"
                   placeholder=" رمز عبور"
                 />
-                <button className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md">
-                  عضویت
-                </button>
+
+                <ButtonViget
+                  className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md"
+                  type="submit"
+                  onclick={registaerSubmitHandler}
+                  disabled={false}
+                >
+                  <p>عضویت</p>
+                </ButtonViget>
               </form>
             </div>
             <ul className="flex flex-col gap-3  list-disc p-2 mt-2">
