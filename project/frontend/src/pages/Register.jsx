@@ -3,10 +3,9 @@ import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { PiMaskHappyDuotone } from "react-icons/pi";
-import { FaLockOpen } from "react-icons/fa6";
-import { IoMdPerson } from "react-icons/io";
-import { MdEmail } from "react-icons/md";
+
 import { Link } from "react-router-dom";
+import InputTextArea from "../components/UI/InputTextArea";
 export default function Register() {
   return (
     <div className="flex flex-col">
@@ -33,30 +32,28 @@ export default function Register() {
             </div>
             <div className="flex w-full">
               <form action="#" className="w-full flex flex-col gap-4 mt-5">
-                <div className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite border-greydark rounded-md shadow-md shadow-greydark">
-                  <input
-                    className="outline-none border-none  text-lg p-2 w-[95%] bg-myWhite placeholder:text-sm"
-                    type="text"
-                    placeholder="نام کاربری   "
-                  />
-                  <IoMdPerson className="text-3xl text-greydark" />
-                </div>
-                <div className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite border-greydark rounded-md shadow-md shadow-greydark">
-                  <input
-                    className="outline-none border-none  text-lg p-2 w-[95%] bg-myWhite placeholder:text-sm"
-                    type="email"
-                    placeholder="   آدرس ایمیل"
-                  />
-                  <MdEmail className="text-3xl text-greydark" />
-                </div>
-                <div className="flex items-center bg-myWhite gap-2 w-[95%] mx-auto p-2 border border-greydark rounded-md shadow-md shadow-greydark">
-                  <input
-                    className="outline-none border-none  text-lg p-2 w-[95%] placeholder:text-sm bg-myWhite"
-                    type="password"
-                    placeholder="رمز عبور "
-                  />
-                  <FaLockOpen className="text-3xl text-greydark" />
-                </div>
+                <InputTextArea
+                  className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
+                  element="input"
+                  type="text"
+                  icons="person"
+                  placeholder="نام کاربری"
+                />
+
+                <InputTextArea
+                  className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
+                  element="input"
+                  type="email"
+                  placeholder="ایمیل را وارد نمایید"
+                />
+
+                <InputTextArea
+                  className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
+                  element="input"
+                  type="password"
+                  icons="lock"
+                  placeholder=" رمز عبور"
+                />
                 <button className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md">
                   عضویت
                 </button>
