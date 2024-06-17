@@ -1,8 +1,9 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { FaLockOpen } from "react-icons/fa6";
 import { IoMdPerson } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import validator from "../../validators/validator";
+
 const inpuTexReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE": {
@@ -28,7 +29,14 @@ export default function InputTextArea(props) {
     isValid: false,
   });
 
-  function onchangeHander(event) {
+  const { value, isValid } = mainInputTextarea;
+  const { id, onInputsHandler } = props;
+
+  useEffect(() => {
+    onInputsHandler(id, value, isValid);
+  }, [value]);
+
+  function onchangeHanderMy(event) {
     dispatch({
       type: "CHANGE",
       value: event.target.value,
@@ -48,7 +56,7 @@ export default function InputTextArea(props) {
           type={props.type}
           placeholder={props.placeholder}
           value={mainInputTextarea.value}
-          onChange={onchangeHander}
+          onChange={onchangeHanderMy}
         />
         {props.icons === "person" ? (
           <IoMdPerson className="text-3xl text-greydark" />
@@ -69,7 +77,7 @@ export default function InputTextArea(props) {
           className={props.className}
           placeholder={props.placeholder}
           value={mainInputTextarea.value}
-          onChange={onchangeHander}
+          onChange={onchangeHanderMy}
           required
         ></textarea>
         {props.icons === "person" ? (

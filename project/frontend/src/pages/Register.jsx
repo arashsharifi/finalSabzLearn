@@ -7,8 +7,32 @@ import { PiMaskHappyDuotone } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import InputTextArea from "../components/UI/InputTextArea";
 import ButtonViget from "../components/UI/ButtonViget";
+import { useForm } from "../hooks/useForm";
+import {
+  emailValidator,
+  maxValidator,
+  minValidator,
+  requiredValidator,
+} from "../validators/rules";
 
 export default function Register() {
+  const [formState, onInputsHandler] = useForm(
+    {
+      username: {
+        value: "",
+        isValid: false,
+      },
+      email: {
+        value: "",
+        isValid: false,
+      },
+      password: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
   const registaerSubmitHandler = (e) => {
     e.preventDefault();
     console.log("register");
@@ -39,35 +63,64 @@ export default function Register() {
             <div className="flex w-full">
               <form action="#" className="w-full flex flex-col gap-4 mt-5">
                 <InputTextArea
+                  id="username"
                   className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
                   element="input"
                   type="text"
                   icons="person"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(8),
+                    maxValidator(20),
+                  ]}
                   placeholder="نام کاربری"
+                  onInputsHandler={onInputsHandler}
                 />
 
                 <InputTextArea
+                  id="email"
                   className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
                   element="input"
                   type="email"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(4),
+                    emailValidator(),
+                  ]}
                   placeholder="ایمیل را وارد نمایید"
+                  onInputsHandler={onInputsHandler}
                 />
 
                 <InputTextArea
+                  id="password"
                   className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
                   element="input"
                   type="password"
                   icons="lock"
                   placeholder=" رمز عبور"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(4),
+                    maxValidator(11),
+                  ]}
+                  onInputsHandler={onInputsHandler}
                 />
 
                 <ButtonViget
-                  className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md"
+                  className={`${
+                    formState.isFormValid
+                      ? "bg-customfour"
+                      : "bg-greydoubledarko"
+                  } bg-customfour duration-200 rounded-md w-[95%] py-3  ${
+                    formState.isFormValid
+                      ? "hover:bg-customfive"
+                      : "hover:bg-greydoubledarko"
+                  }  mx-auto  text-myWhite  shadow-md`}
                   type="submit"
                   onclick={registaerSubmitHandler}
-                  disabled={false}
+                  disabled={!formState.isFormValid}
                 >
-                  <p>عضویت</p>
+                  <p>ورود</p>
                 </ButtonViget>
               </form>
             </div>

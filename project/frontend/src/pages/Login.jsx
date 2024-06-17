@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 import { PiMaskHappyDuotone } from "react-icons/pi";
 import ButtonViget from "../components/UI/ButtonViget";
+//constomhook
+import { useForm } from "../hooks/useForm";
 import {
   requiredValidator,
   minValidator,
@@ -15,6 +17,21 @@ import {
 } from "../validators/rules";
 
 export default function Login() {
+  const [formState, onInputsHandler] = useForm(
+    {
+      username: {
+        value: "",
+        isValid: false,
+      },
+      password: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
+
+  console.log(formState);
   const submitLoginHandler = (e) => {
     e.preventDefault();
     console.log("login");
@@ -45,6 +62,7 @@ export default function Login() {
             <div className="flex w-full">
               <form action="#" className="w-full flex flex-col gap-4 mt-5">
                 <InputTextArea
+                  id="username"
                   className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
                   element="input"
                   type="text"
@@ -52,12 +70,13 @@ export default function Login() {
                   placeholder="  ایمیل یا کلمه عبور"
                   validations={[
                     requiredValidator(),
-                    minValidator(8),
+                    minValidator(7),
                     maxValidator(20),
-                    emailValidator(),
                   ]}
+                  onInputsHandler={onInputsHandler}
                 />
                 <InputTextArea
+                  id="password"
                   className="flex items-center bg-myWhite gap-2 w-[95%] mx-auto p-2 border  rounded-md shadow-md shadow-greydark"
                   element="input"
                   type="password"
@@ -68,11 +87,21 @@ export default function Login() {
                     minValidator(8),
                     maxValidator(18),
                   ]}
+                  onInputsHandler={onInputsHandler}
                 />
                 <ButtonViget
-                  className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md"
+                  className={`${
+                    formState.isFormValid
+                      ? "bg-customfour"
+                      : "bg-greydoubledarko"
+                  } bg-customfour duration-200 rounded-md w-[95%] py-3  ${
+                    formState.isFormValid
+                      ? "hover:bg-customfive"
+                      : "hover:bg-greydoubledarko"
+                  }  mx-auto  text-myWhite  shadow-md`}
                   type="submit"
                   onclick={submitLoginHandler}
+                  disabled={!formState.isFormValid}
                 >
                   <p>ورود</p>
                 </ButtonViget>
