@@ -2,13 +2,14 @@ import React, { useReducer } from "react";
 import { FaLockOpen } from "react-icons/fa6";
 import { IoMdPerson } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
+import validator from "../../validators/validator";
 const inpuTexReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE": {
       return {
         ...state,
         value: action.value,
-        isValid: action.isValid,
+        isValid: validator(action.value, action.validations),
       };
     }
     default: {
@@ -18,6 +19,7 @@ const inpuTexReducer = (state, action) => {
 };
 
 export default function InputTextArea(props) {
+  // console.log(props.validations);
   const success = "border-success border-2";
   const error = "border-error border-2";
 
@@ -27,7 +29,12 @@ export default function InputTextArea(props) {
   });
 
   function onchangeHander(event) {
-    dispatch({ type: "CHANGE", value: event.target.value, isValid: true });
+    dispatch({
+      type: "CHANGE",
+      value: event.target.value,
+      validations: props.validations,
+      isValid: true,
+    });
   }
   const element =
     props.element === "input" ? (

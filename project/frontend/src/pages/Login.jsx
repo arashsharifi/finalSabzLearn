@@ -7,6 +7,12 @@ import { Link } from "react-router-dom";
 
 import { PiMaskHappyDuotone } from "react-icons/pi";
 import ButtonViget from "../components/UI/ButtonViget";
+import {
+  requiredValidator,
+  minValidator,
+  maxValidator,
+  emailValidator,
+} from "../validators/rules";
 
 export default function Login() {
   const submitLoginHandler = (e) => {
@@ -44,6 +50,12 @@ export default function Login() {
                   type="text"
                   icons="person"
                   placeholder="  ایمیل یا کلمه عبور"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(8),
+                    maxValidator(20),
+                    emailValidator(),
+                  ]}
                 />
                 <InputTextArea
                   className="flex items-center bg-myWhite gap-2 w-[95%] mx-auto p-2 border  rounded-md shadow-md shadow-greydark"
@@ -51,6 +63,11 @@ export default function Login() {
                   type="password"
                   icons="lock"
                   placeholder="رمز عبور"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(8),
+                    maxValidator(18),
+                  ]}
                 />
                 <ButtonViget
                   className="bg-customfour duration-200 rounded-md w-[95%] py-3 hover:bg-customfive mx-auto  text-myWhite  shadow-md"
