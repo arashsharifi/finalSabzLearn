@@ -68,11 +68,7 @@ export default function Login() {
                   type="text"
                   icons="person"
                   placeholder="  ایمیل یا کلمه عبور"
-                  validations={[
-                    requiredValidator(),
-                    minValidator(7),
-                    maxValidator(20),
-                  ]}
+                  validations={[requiredValidator(), emailValidator()]}
                   onInputsHandler={onInputsHandler}
                 />
                 <InputTextArea
