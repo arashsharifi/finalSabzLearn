@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -14,8 +14,11 @@ import {
   minValidator,
   requiredValidator,
 } from "../validators/rules";
+import AuthContext from "../context/authContext";
 
 export default function Register() {
+  const authContext = useContext(AuthContext);
+
   const [formState, onInputsHandler] = useForm(
     {
       username: {
@@ -38,8 +41,6 @@ export default function Register() {
     false
   );
 
-  console.log(formState);
-
   const registaerSubmitHandler = (e) => {
     e.preventDefault();
     const newUserInfos = {
@@ -58,8 +59,11 @@ export default function Register() {
       body: JSON.stringify(newUserInfos),
     })
       .then((res) => res.json())
-      .then((result) => console.log(result.accessToken));
-
+      .then((result) => {
+        // console.log(result);
+        authContext.login(result.user, result.accessToken);
+      });
+    console.log(authContext);
     // fetch("http://localhost:4000/v1/auth/register", {
     //   method: "POST",
     //   headers: {
@@ -82,8 +86,6 @@ export default function Register() {
     //   .catch((error) => {
     //     console.error("Error:", error);
     //   });
-
-    console.log(newUserInfos);
   };
 
   return (
