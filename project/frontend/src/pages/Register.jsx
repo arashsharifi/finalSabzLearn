@@ -22,6 +22,10 @@ export default function Register() {
         value: "",
         isValid: false,
       },
+      name: {
+        value: "",
+        isValid: false,
+      },
       email: {
         value: "",
         isValid: false,
@@ -33,10 +37,55 @@ export default function Register() {
     },
     false
   );
+
+  console.log(formState);
+
   const registaerSubmitHandler = (e) => {
     e.preventDefault();
-    console.log("register");
+    const newUserInfos = {
+      name: formState.inputs.name.value,
+      username: formState.inputs.username.value,
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+      confirmPassword: formState.inputs.password.value,
+    };
+
+    fetch("http://localhost:4000/v1/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUserInfos),
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result.accessToken));
+
+    // fetch("http://localhost:4000/v1/auth/register", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(newUserInfos),
+    // })
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       return res.json().then((data) => {
+    //         console.error("Error:", data);
+    //         throw new Error("Network response was not ok");
+    //       });
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
+
+    console.log(newUserInfos);
   };
+
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -63,6 +112,20 @@ export default function Register() {
             <div className="flex w-full">
               <form action="#" className="w-full flex flex-col gap-4 mt-5">
                 <InputTextArea
+                  id="name"
+                  className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
+                  element="input"
+                  type="text"
+                  icons="family"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(10),
+                    maxValidator(20),
+                  ]}
+                  placeholder="نام نام خانوادگی "
+                  onInputsHandler={onInputsHandler}
+                />
+                <InputTextArea
                   id="username"
                   className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
                   element="input"
@@ -70,7 +133,7 @@ export default function Register() {
                   icons="person"
                   validations={[
                     requiredValidator(),
-                    minValidator(8),
+                    minValidator(6),
                     maxValidator(20),
                   ]}
                   placeholder="نام کاربری"
@@ -87,6 +150,7 @@ export default function Register() {
                     minValidator(4),
                     emailValidator(),
                   ]}
+                  icons="email"
                   placeholder="ایمیل را وارد نمایید"
                   onInputsHandler={onInputsHandler}
                 />
