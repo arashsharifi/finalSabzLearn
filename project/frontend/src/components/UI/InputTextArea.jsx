@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { FaLockOpen } from "react-icons/fa6";
 import { IoMdPerson } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
+import { RxFontFamily } from "react-icons/rx";
 import validator from "../../validators/validator";
 
 const inpuTexReducer = (state, action) => {
@@ -58,13 +59,22 @@ export default function InputTextArea(props) {
           value={mainInputTextarea.value}
           onChange={onchangeHanderMy}
         />
-        {props.icons === "person" ? (
+        {/* {props.icons === "person" ? (
           <IoMdPerson className="text-3xl text-greydark" />
         ) : props.icons === "lock" ? (
           <FaLockOpen className="text-3xl text-greydark" />
         ) : (
           <MdEmail className="text-3xl text-greydark" />
-        )}
+        )} */}
+        {props.icons === "person" ? (
+          <IoMdPerson className="text-3xl text-greydark" />
+        ) : props.icons === "lock" ? (
+          <FaLockOpen className="text-3xl text-greydark" />
+        ) : props.icons === "email" ? (
+          <MdEmail className="text-3xl text-greydark" />
+        ) : props.icons === "family" ? (
+          <RxFontFamily className="text-3xl text-greydark" />
+        ) : null}
       </div>
     ) : (
       <div
