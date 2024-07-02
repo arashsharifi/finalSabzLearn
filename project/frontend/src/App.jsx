@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRoutes } from "react-router-dom";
 
 import routes from "./routes";
@@ -10,20 +10,36 @@ export default function App() {
   const [userInfos, setUserInfos] = useState({});
   const router = useRoutes(routes);
 
-  const login = (userInfos, token) => {
-    console.log("token", token);
-    console.log("userInfos", userInfos);
+  const login = useCallback((userInfos, token) => {
+    console.log(token);
+    console.log(userInfos);
     setToken(token);
     SetIsLoggedIn(true);
     setUserInfos(userInfos);
     localStorage.setItem("user", JSON.stringify({ token }));
-  };
-  // console.log("userInfos", userInfos);
-  const logout = () => {
+  }, []);
+
+  const logout = useCallback(() => {
     setToken(null);
     setUserInfos({});
     localStorage.removeItem("user");
-  };
+  }, []);
+
+  useEffect(() => {
+    const localStorageData = JSON.parse(localStorage.getItem("user"));
+    if (localStorageData) {
+      fetch("http://localhost:4000/v1/auth/me", {
+        headers: {
+          Authorization: `Bearer ${localStorageData.token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          SetIsLoggedIn(true);
+          setUserInfos(result);
+        });
+    }
+  }, [login]);
   return (
     <AuthContext.Provider
       value={{

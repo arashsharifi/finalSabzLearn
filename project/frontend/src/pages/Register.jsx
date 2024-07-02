@@ -4,10 +4,13 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { PiMaskHappyDuotone } from "react-icons/pi";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputTextArea from "../components/UI/InputTextArea";
 import ButtonViget from "../components/UI/ButtonViget";
 import { useForm } from "../hooks/useForm";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   emailValidator,
   maxValidator,
@@ -18,7 +21,7 @@ import AuthContext from "../context/authContext";
 
 export default function Register() {
   const authContext = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const [formState, onInputsHandler] = useForm(
     {
       username: {
@@ -41,7 +44,7 @@ export default function Register() {
     false
   );
 
-  const registaerSubmitHandler = (e) => {
+  const registaerSubmitHandler = async (e) => {
     e.preventDefault();
     const newUserInfos = {
       name: formState.inputs.name.value,
@@ -51,41 +54,41 @@ export default function Register() {
       confirmPassword: formState.inputs.password.value,
     };
 
-    fetch("http://localhost:4000/v1/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUserInfos),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        // console.log(result);
-        authContext.login(result.user, result.accessToken);
+    try {
+      const response = await fetch("http://localhost:4000/v1/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUserInfos),
       });
-    console.log(authContext);
-    // fetch("http://localhost:4000/v1/auth/register", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(newUserInfos),
-    // })
-    //   .then((res) => {
-    //     if (!res.ok) {
-    //       return res.json().then((data) => {
-    //         console.error("Error:", data);
-    //         throw new Error("Network response was not ok");
-    //       });
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        authContext.login(result.user, result.accessToken);
+        toast.success(`${result.user.name} 🎈✨ خوش آمدی `, {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          progress: undefined,
+          theme: "light",
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -208,6 +211,7 @@ export default function Register() {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
