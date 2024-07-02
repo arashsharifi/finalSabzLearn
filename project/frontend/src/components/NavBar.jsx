@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { SlBasket } from "react-icons/sl";
 import { IoSearchSharp } from "react-icons/io5";
@@ -13,14 +13,24 @@ import ButtonCustomOne from "./ButtonCustomOne";
 import NavLinks from "./NavLinks";
 
 import logo from "../../public/images/logo/1.png";
+import AuthContext from "../context/authContext";
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
+  const authContext = useContext(AuthContext);
+
   return (
     <nav className="bg-myWhite z-50">
       <div className="flex items-center font-medium justify-around">
         <div className=" hidden md:flex gap-2  ">
-          <Botton>آرش امیرشریفی</Botton>
+          {authContext.userInfos.name ? (
+            <Botton>{authContext.userInfos.name} </Botton>
+          ) : (
+            <Botton>
+              <Link to="/register">ثبت نام / ورود</Link>
+            </Botton>
+          )}
+
           <Botton>
             <IoSearchSharp />
           </Botton>
