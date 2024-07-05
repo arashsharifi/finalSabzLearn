@@ -28,6 +28,7 @@ export default function App() {
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
     if (localStorageData) {
+      console.log("arash");
       fetch("http://localhost:4000/v1/auth/me", {
         headers: {
           Authorization: `Bearer ${localStorageData.token}`,
@@ -39,7 +40,9 @@ export default function App() {
           setUserInfos(result);
         });
     }
-  }, [login]);
+  }, [token]);
+
+  console.log("userInfos", userInfos);
   return (
     <AuthContext.Provider
       value={{
