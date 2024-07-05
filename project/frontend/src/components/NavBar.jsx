@@ -18,7 +18,7 @@ import AuthContext from "../context/authContext";
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const authContext = useContext(AuthContext);
-
+  console.log(authContext);
   return (
     <nav className="bg-myWhite z-50">
       <div className="flex items-center font-medium justify-around">
@@ -81,19 +81,29 @@ export default function NavBar() {
           <NavLinks />
           <div className="py-5 flex flex-col gap-4 bg-myWhite">
             <div className="w-[50%]">
-              <Botton>آرش امیر شریفی</Botton>
+              {authContext.userInfos.name ? (
+                <Botton>{authContext.userInfos.name}</Botton>
+              ) : (
+                <Link to="/register">
+                  <Botton>ثبت نام /ورود</Botton>
+                </Link>
+              )}
             </div>
             <div className="flex gap-1">
               <span className="text-xl">
                 <FaPhone className="text-customfour" />
               </span>
-              <p className="text-sm"> 09365305248</p>
+              <p className="text-sm"> 09123934444</p>
             </div>
             <div className="flex gap-1">
               <span className="text-xl">
                 <MdEmail className="text-customfour" />
               </span>
-              <p className="text-sm"> ArashSharfi1970@gmail.com</p>
+              {authContext.userInfos.email ? (
+                <p className="text-sm"> {authContext.userInfos.email}</p>
+              ) : (
+                <p className="text-sm"> ArashSharfi1970@gmail.com</p>
+              )}
             </div>
           </div>
         </ul>

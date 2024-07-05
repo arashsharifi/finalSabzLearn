@@ -85,6 +85,16 @@ export default function Register() {
       } else {
         const errorData = await response.json();
         console.error(errorData);
+        toast.error(`${errorData.message[0].message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
       console.error(error);
@@ -169,7 +179,7 @@ export default function Register() {
                   placeholder=" رمز عبور"
                   validations={[
                     requiredValidator(),
-                    minValidator(4),
+                    minValidator(6),
                     maxValidator(11),
                   ]}
                   onInputsHandler={onInputsHandler}

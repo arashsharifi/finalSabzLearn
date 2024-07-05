@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import InputTextArea from "../components/UI/InputTextArea";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { PiMaskHappyDuotone } from "react-icons/pi";
 import ButtonViget from "../components/UI/ButtonViget";
+import AuthContext from "../context/authContext";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 //constomhook
 import { useForm } from "../hooks/useForm";
 import {
@@ -17,6 +21,8 @@ import {
 } from "../validators/rules";
 
 export default function Login() {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   const [formState, onInputsHandler] = useForm(
     {
       username: {
@@ -31,11 +37,148 @@ export default function Login() {
     false
   );
 
-  console.log(formState);
-  const submitLoginHandler = (e) => {
+  // const submitLoginHandler = async (e) => {
+  //   e.preventDefault();
+  //   const userData = {
+  //     identifier: formState?.inputs?.username?.value,
+  //     password: formState?.inputs?.password?.value,
+  //   };
+
+  //   try {
+  //     const response = await fetch("http://localhost:4000/v1/auth/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(userData),
+  //     });
+
+  //     if (response.ok) {
+  //       const result = await response.json();
+  //       console.log(result.accessToken);
+  //       authContext.login({}, result.accessToken);
+  //       toast.success(`${formState?.inputs?.username?.value} 🎈✨ خوش اومدی `, {
+  //         position: "top-center",
+  //         autoClose: 2000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         theme: "colored",
+  //         progress: undefined,
+  //         theme: "light",
+  //       });
+  //       // setTimeout(() => {
+  //       //   navigate("/");
+  //       // }, 3000);
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.error(errorData);
+
+  //       if (
+  //         errorData.includes("there is no user with this email or username")
+  //       ) {
+  //         toast.error(`کاربر یافت نشد`, {
+  //           position: "top-right",
+  //           autoClose: 2000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         });
+  //       } else {
+  //         toast.error(`${errorData}`, {
+  //           position: "top-right",
+  //           autoClose: 2000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const submitLoginHandler = async (e) => {
     e.preventDefault();
-    console.log("login");
+    const userData = {
+      identifier: formState?.inputs?.username?.value,
+      password: formState?.inputs?.password?.value,
+    };
+
+    try {
+      const response = await fetch("http://localhost:4000/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result.accessToken);
+        authContext.login({}, result.accessToken);
+        toast.success(
+          `${formState?.inputs?.username?.value} 🎈✨ Welcome back! `,
+          {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+            progress: undefined,
+            theme: "light",
+          }
+        );
+
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
+
+        if (
+          errorData.includes("there is no user with this email or username")
+        ) {
+          toast.error(`کاربر یافت نشد`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(`${errorData}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -68,7 +211,11 @@ export default function Login() {
                   type="text"
                   icons="person"
                   placeholder="  ایمیل یا کلمه عبور"
-                  validations={[requiredValidator(), emailValidator()]}
+                  validations={[
+                    requiredValidator(),
+                    minValidator(6),
+                    maxValidator(20),
+                  ]}
                   onInputsHandler={onInputsHandler}
                 />
                 <InputTextArea
@@ -143,8 +290,26 @@ export default function Login() {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
 
+// console.log(formState);
+
+// const submitLoginHandler = (e) => {
+//   e.preventDefault();
+//   const userData = {
+//     identifier: formState?.inputs?.username?.value,
+//     password: formState?.inputs?.password?.value,
+//   };
+
+//   fetch("http://localhost:4000/v1/auth/login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(userData),
+//   }).then((res) => console.log(res));
+// };
 ("w-full px-0 text-sm text-gray-900 bg-white border-0");
