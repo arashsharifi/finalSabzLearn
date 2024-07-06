@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -11,6 +11,7 @@ import AuthContext from "../context/authContext";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReCAPTCHA from "react-google-recaptcha";
 //constomhook
 import { useForm } from "../hooks/useForm";
 import {
@@ -23,6 +24,7 @@ import {
 export default function Login() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isGoogleRecaptchaVerify,setIsGoogleRecaptchaVerify]=useState(false)
   const [formState, onInputsHandler] = useForm(
     {
       username: {
@@ -106,6 +108,11 @@ export default function Login() {
   //   }
   // };
 
+  const onchangeHandler=()=>{
+    console.log('yeeesssss')
+    setIsGoogleRecaptchaVerify(true)
+  }
+
   const submitLoginHandler = async (e) => {
     e.preventDefault();
     const userData = {
@@ -127,7 +134,7 @@ export default function Login() {
         console.log(result.accessToken);
         authContext.login({}, result.accessToken);
         toast.success(
-          `${formState?.inputs?.username?.value} 🎈✨ Welcome back! `,
+          `${formState?.inputs?.username?.value} 🎈✨ به به سلام چطوری `,
           {
             position: "top-center",
             autoClose: 2000,
@@ -232,19 +239,26 @@ export default function Login() {
                   ]}
                   onInputsHandler={onInputsHandler}
                 />
+                <div>
+                  <ReCAPTCHA
+                    sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                    onChange={onchangeHandler}
+                  />
+                  
+                </div>
                 <ButtonViget
                   className={`${
-                    formState.isFormValid
+                    (formState.isFormValid &&isGoogleRecaptchaVerify)
                       ? "bg-customfour"
                       : "bg-greydoubledarko"
                   } bg-customfour duration-200 rounded-md w-[95%] py-3  ${
-                    formState.isFormValid
+                    (formState.isFormValid &&isGoogleRecaptchaVerify)
                       ? "hover:bg-customfive"
                       : "hover:bg-greydoubledarko"
                   }  mx-auto  text-myWhite  shadow-md`}
                   type="submit"
                   onclick={submitLoginHandler}
-                  disabled={!formState.isFormValid}
+                  disabled={(!formState.isFormValid || !isGoogleRecaptchaVerify)}
                 >
                   <p>ورود</p>
                 </ButtonViget>
