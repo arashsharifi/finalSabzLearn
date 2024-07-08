@@ -1,12 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { dataAboutCategory } from "../data";
+import { Link } from "react-router-dom";
 
 export default function TopBr() {
   const [category, setCategory] = useState(dataAboutCategory);
   let [open, setOpen] = useState(false);
+  const [menuData, setMenuData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchMenuData = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/v1/menus/topbar");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setMenuData(data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuData();
+  }, []);
+
+  const getHrefPath = (href) => {
+    if (href && !href.includes('/course-info/')) {
+      return `/course-info/${href}`;
+    } else {
+      return href;
+    }
+  };
+
+  console.log("menuData", menuData);
+
+  const getRandomItems = (data, count) => {
+    const shuffled = data.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  const randomMenuItems = getRandomItems(menuData, 6);
 
   return (
     <div className="hidden lg:block shadow-md w-full  font-iransans bg-grey">
@@ -31,9 +70,10 @@ export default function TopBr() {
             open ? "top-20 opacity-100" : "top-[-490px]"
           } `}
         >
-          {category.map((cat) => (
-            <li className="font-iransans" key={cat.id}>
-              <a href="#">{cat.title}</a>
+          {randomMenuItems.map((item) => (
+            <li className="font-iransans" key={item._id}>
+              {/* <a href={item.href}>{item.title}</a> */}
+              <Link to={getHrefPath(item.href)}>{item.title}</Link>
             </li>
           ))}
         </ul>
