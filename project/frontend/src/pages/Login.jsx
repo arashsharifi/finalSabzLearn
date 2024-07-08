@@ -25,6 +25,9 @@ export default function Login() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const [isGoogleRecaptchaVerify,setIsGoogleRecaptchaVerify]=useState(false)
+
+
+
   const [formState, onInputsHandler] = useForm(
     {
       username: {
@@ -239,7 +242,7 @@ export default function Login() {
                   ]}
                   onInputsHandler={onInputsHandler}
                 />
-                <div>
+                <div className="w-full  flex justify-center">
                   <ReCAPTCHA
                     sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                     onChange={onchangeHandler}
