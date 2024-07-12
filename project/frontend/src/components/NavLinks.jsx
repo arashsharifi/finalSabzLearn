@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -12,10 +11,28 @@ export default function NavLinks() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const fetchMenuData = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:4000/v1/menus/topbar");
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       const data = await response.json();
+  //       setMenuData(data);
+  //     } catch (error) {
+  //       setError(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchMenuData();
+  // }, []);
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await fetch("http://localhost:4000/v1/menus/topbar");
+        const response = await fetch("http://localhost:4000/v1/menus");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -43,81 +60,33 @@ export default function NavLinks() {
     return <div>No data available</div>;
   }
 
-  const frontendData = menuData.slice(0, 6);
-  const backendData = menuData.slice(6, 11);
-  const pythonData = menuData.slice(11, 14);
-  const freelancingData = menuData.length > 14 ? menuData.slice(14) : [];
-
-  const linksNavDataaaa = [
-    {
-      id: 1,
-      name: "آموزش فرانت اند",
-      submenu: true,
-      sublinks: [
-        {
-          Head: "آموزش فرانت اند",
-          sublink: frontendData.map((item, index) => ({
-            id: index + 1,
-            name: item.title,
-            link: item.href,
-          })),
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "آموزش بکند",
-      submenu: true,
-      sublinks: [
-        {
-          Head: "آموزش بکند",
-          sublink: backendData.map((item, index) => ({
-            id: index + 1,
-            name: item.title,
-            link: item.href,
-          })),
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "آموزش پایتون",
-      submenu: true,
-      sublinks: [
-        {
-          Head: "آموزش پایتون",
-          sublink: pythonData.map((item, index) => ({
-            id: index + 1,
-            name: item.title,
-            link: item.href,
-          })),
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "آموزش فری لنسری",
-      submenu: true,
-      sublinks: [
-        {
-          Head: "آموزش فری لنسری",
-          sublink: freelancingData.map((item, index) => ({
-            id: index + 1,
-            name: item.title,
-            link: item.href,
-          })),
-        },
-      ],
-    },
-  ];
-
-  // console.log("linksNavDataaaa", linksNavDataaaa);
-
+  const linksNavDataaaa = menuData.map((item, index) => ({
+    id: item._id,
+    name: item.title,
+    href: item.href,
+    submenu: item.submenus && item.submenus.length > 0,
+    sublinks:
+      item.submenus && item.submenus.length > 0
+        ? item.submenus.map((subItem, subIndex) => ({
+            id: subItem._id,
+            name: subItem.title,
+            href: subItem.href,
+          }))
+        : [],
+  }));
+  console.log("saads", linksNavDataaaa);
+  const getHrefPath = (href) => {
+    if (href && !href.includes("/course-info/")) {
+      return `/course-info/${href}`;
+    } else {
+      return href;
+    }
+  };
   return (
-    <>
+    <div className="w-full flex flex-col md:flex-row justify-between text-sm">
       {linksNavDataaaa.map((link) => (
         <div key={link.id}>
-          <div className="px-3 text-left md:cursor-pointer group font-iransans">
+          <div className="px-3 text-left md:cursor-pointer  group font-iransans">
             <h1
               onClick={() => {
                 heading !== link.name ? setHeading(link.name) : setHeading("");
@@ -133,29 +102,21 @@ export default function NavLinks() {
                 <IoIosArrowDown />
               </span>
             </h1>
-
-            {link.submenu && (
+            {link.submenu && link.sublinks.length > 0 && (
               <div>
                 <div className="absolute top-28 hidden group-hover:md:block hover:md:block">
                   <div className="py-3">
                     <div className="w-4 h-4 left-3 absolute mt-1 bg-customfive rotate-45 shadow-lg rounded-sm"></div>
                   </div>
-                  <div className="bg-greydarko p-5 grid grid-cols-2 gap-5 rounded-md z-50">
+                  <div className="bg-greydarko p-5 grid grid-cols-2 gap-5 rounded-md z-50 text-sm">
                     {link.sublinks.map((mysublink, sublinkIndex) => (
                       <div key={sublinkIndex}>
-                        <h2 className="text-lg font-iransans flex items-center text-customThree">
-                          {mysublink.Head}
-                        </h2>
-                        {mysublink.sublink.map((slink) => (
-                          <li className="text-sm text-greydark" key={slink.id}>
-                            <Link
-                              to={slink.link}
-                              className="hover:text-customfive duration-300"
-                            >
-                              {slink.name}
-                            </Link>
-                          </li>
-                        ))}
+                        <Link
+                          to={getHrefPath(mysublink.href)}
+                          className="text-lg font-iransans flex items-center text-customThree duration-200 hover:text-customseven"
+                        >
+                          {mysublink.name}
+                        </Link>
                       </div>
                     ))}
                   </div>
@@ -164,7 +125,7 @@ export default function NavLinks() {
             )}
           </div>
           {/* mobile menus */}
-          <div className="block md:hidden">
+          <div className="flex flex-col md:hidden ">
             <div
               className={`${heading === link.name ? "md:hidden" : "hidden"}`}
             >
@@ -172,41 +133,12 @@ export default function NavLinks() {
                 <div>
                   {link.sublinks.map((mysublink, sublinkIndex) => (
                     <div key={sublinkIndex}>
-                      <h3
-                        onClick={() =>
-                          subHeading !== mysublink.Head
-                            ? setSubHeading(mysublink.Head)
-                            : setSubHeading("")
-                        }
-                        className="flex justify-between items-center md:pl-0 pl-5 py-4 md:pr-0 pr-5 bg-greydark hover:bg-grey duration-300 w-[85%] mx-auto m-2 rounded-lg"
+                      <Link
+                        to={getHrefPath(mysublink.href)}
+                        className="flex justify-between items-center md:pl-0 pl-5 py-4 md:pr-0 pr-5 bg-greydark hover:bg-grey duration-300 w-[85%] mx-auto m-2 rounded-lg duration-200 hover:text-customseven"
                       >
-                        {mysublink.Head}
-                        <span className="text-xl md:mt-1 md:ml-2 inline">
-                          {subHeading === mysublink.Head ? (
-                            <IoIosArrowDown />
-                          ) : (
-                            <IoIosArrowUp />
-                          )}
-                        </span>
-                      </h3>
-                      <div
-                        className={`${
-                          subHeading === mysublink.Head ? "md:hidden" : "hidden"
-                        }`}
-                      >
-                        {mysublink.sublink.map((slink) => (
-                          <li
-                            className="text-sm text-greydark py-3 pl-14 w-[80%] mx-auto flex"
-                            key={slink.id}
-                          >
-                            <p className="hover:text-customfive duration-300 border w-full rounded-lg p-3 border-myWhite hover:border-customfive mx-auto">
-                              <Link to={slink.link} className="w-full">
-                                {slink.name}
-                              </Link>
-                            </p>
-                          </li>
-                        ))}
-                      </div>
+                        {mysublink.name}
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -215,7 +147,6 @@ export default function NavLinks() {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }
-

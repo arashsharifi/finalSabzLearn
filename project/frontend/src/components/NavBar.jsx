@@ -21,8 +21,8 @@ export default function NavBar() {
   console.log(authContext);
   return (
     <nav className="bg-myWhite z-50">
-      <div className="flex items-center font-medium justify-around">
-        <div className=" hidden md:flex gap-2  ">
+      <div className="flex items-center font-medium justify-between ">
+        <div className=" hidden md:flex gap-2  ml-4 ">
           {authContext.userInfos.name ? (
             <Botton>{authContext.userInfos.name} </Botton>
           ) : (
@@ -40,18 +40,17 @@ export default function NavBar() {
             </ButtonCustomOne>
           </div>
         </div>
-        <ul className="md:flex hidden uppercase items-center gap-8 font-iransans">
-          <li>
-            <Link to="" className="py-7 px-3 inline-block">
-              مهارت های نرم
-            </Link>
-          </li>
-          <NavLinks />
-          <li>
-            <Link to="" className="py-7 px-3 inline-block">
-              صفحه اصلی
-            </Link>
-          </li>
+        <ul className="md:flex hidden uppercase items-center gap-8 font-iransans  w-[70%]">
+          <div className="w-[80%] flex">
+            <NavLinks />
+          </div>
+          <div className="w-[20%]">
+            <li>
+              <Link to="" className="py-7 px-3 inline-block">
+                صفحه اصلی
+              </Link>
+            </li>
+          </div>
         </ul>
 
         <div className="z-50 p-5 md:w-auto w-full flex justify-between">
