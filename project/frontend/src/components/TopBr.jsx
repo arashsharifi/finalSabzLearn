@@ -29,9 +29,20 @@ export default function TopBr() {
 
     fetchMenuData();
   }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!menuData) {
+    return <div>No data available</div>;
+  }
 
   const getHrefPath = (href) => {
-    if (href && !href.includes('/course-info/')) {
+    if (href && !href.includes("/course-info/")) {
       return `/course-info/${href}`;
     } else {
       return href;

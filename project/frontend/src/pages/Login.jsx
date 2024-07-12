@@ -24,9 +24,7 @@ import {
 export default function Login() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isGoogleRecaptchaVerify,setIsGoogleRecaptchaVerify]=useState(false)
-
-
+  const [isGoogleRecaptchaVerify, setIsGoogleRecaptchaVerify] = useState(false);
 
   const [formState, onInputsHandler] = useForm(
     {
@@ -111,10 +109,9 @@ export default function Login() {
   //   }
   // };
 
-  const onchangeHandler=()=>{
-    console.log('yeeesssss')
-    setIsGoogleRecaptchaVerify(true)
-  }
+  const onchangeHandler = () => {
+    setIsGoogleRecaptchaVerify(true);
+  };
 
   const submitLoginHandler = async (e) => {
     e.preventDefault();
@@ -134,7 +131,7 @@ export default function Login() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log(result.accessToken);
+
         authContext.login({}, result.accessToken);
         toast.success(
           `${formState?.inputs?.username?.value} 🎈✨ به به سلام چطوری `,
@@ -156,7 +153,6 @@ export default function Login() {
         }, 3000);
       } else {
         const errorData = await response.json();
-        console.error(errorData);
 
         if (
           errorData.includes("there is no user with this email or username")
@@ -185,7 +181,16 @@ export default function Login() {
         }
       }
     } catch (error) {
-      console.error(error);
+      toast.error(`${error}`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -247,21 +252,20 @@ export default function Login() {
                     sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                     onChange={onchangeHandler}
                   />
-                  
                 </div>
                 <ButtonViget
                   className={`${
-                    (formState.isFormValid &&isGoogleRecaptchaVerify)
+                    formState.isFormValid && isGoogleRecaptchaVerify
                       ? "bg-customfour"
                       : "bg-greydoubledarko"
                   } bg-customfour duration-200 rounded-md w-[95%] py-3  ${
-                    (formState.isFormValid &&isGoogleRecaptchaVerify)
+                    formState.isFormValid && isGoogleRecaptchaVerify
                       ? "hover:bg-customfive"
                       : "hover:bg-greydoubledarko"
                   }  mx-auto  text-myWhite  shadow-md`}
                   type="submit"
                   onclick={submitLoginHandler}
-                  disabled={(!formState.isFormValid || !isGoogleRecaptchaVerify)}
+                  disabled={!formState.isFormValid || !isGoogleRecaptchaVerify}
                 >
                   <p>ورود</p>
                 </ButtonViget>
