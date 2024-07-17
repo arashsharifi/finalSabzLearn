@@ -3,7 +3,6 @@ import { IoMdAdd } from "react-icons/io";
 import { FaMinus } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa6";
 export default function Accordian({ title, desc, time }) {
-  console.log(time);
   const [accordianOpen, setAccordianOpen] = useState(false);
   return (
     <div

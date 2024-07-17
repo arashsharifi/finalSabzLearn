@@ -26,6 +26,7 @@ import pico1 from "../img/background2.png";
 import avatar from "../img/boosOne.jpg";
 
 import { BreadCrumbData, lessonStatus, randomData } from "../data";
+import { useParams } from "react-router-dom";
 
 export default function CourseInfo() {
   const [boxDitals, setBoxDitails] = useState(lessonStatus);
@@ -34,7 +35,21 @@ export default function CourseInfo() {
   const milliseconds1 = Number(boxDitals[0].update);
   const date = new Date(milliseconds1).toLocaleDateString("fa-IR");
   const hour = Number(boxDitals[0].hourCourse);
-  console.log(randomDatas);
+
+  const { courseName } = useParams();
+  useEffect(() => {
+    console.log(courseName);
+    fetch(`http://localhost:4000/v1/courses/${courseName}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${
+          JSON.parse(localStorage.getItem("user")).token
+        }`,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result));
+  }, []);
   return (
     <div className="flex flex-col font-iransans">
       <TopBr />
