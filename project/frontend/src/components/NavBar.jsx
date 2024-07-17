@@ -18,7 +18,7 @@ import AuthContext from "../context/authContext";
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const authContext = useContext(AuthContext);
-  console.log(authContext);
+
   return (
     <nav className="bg-myWhite z-50">
       <div className="flex items-center font-medium justify-between ">

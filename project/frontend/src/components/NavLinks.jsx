@@ -74,7 +74,7 @@ export default function NavLinks() {
           }))
         : [],
   }));
-  console.log("saads", linksNavDataaaa);
+
   const getHrefPath = (href) => {
     if (href && !href.includes("/course-info/")) {
       return `/course-info/${href}`;
