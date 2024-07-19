@@ -10,6 +10,9 @@
 .rtl {
   direction: rtl;
 }
+.ltr {
+  direction: ltr;
+}
 
 .paginatinBttns a {
   padding: 13px;

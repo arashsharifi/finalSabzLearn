@@ -27,47 +27,91 @@ import avatar from "../img/boosOne.jpg";
 
 import { BreadCrumbData, lessonStatus, randomData } from "../data";
 import { useParams } from "react-router-dom";
+import SectionComment from "../components/SectionComment";
 
 export default function CourseInfo() {
   const [boxDitals, setBoxDitails] = useState(lessonStatus);
   const [randomDatas, setRandomDatas] = useState(randomData);
 
   const milliseconds1 = Number(boxDitals[0].update);
-  const date = new Date(milliseconds1).toLocaleDateString("fa-IR");
+
   const hour = Number(boxDitals[0].hourCourse);
 
+  //state database
+  const [comments, setComments] = useState([]);
+  const [sessions, setSesstions] = useState([]);
+  const [courseDetails, setCourseDetails] = useState([]);
+  const [Alldata, setAllData] = useState([]);
+  const inImageLoaded = () => setIsLoaderShow(true);
   const { courseName } = useParams();
+
   useEffect(() => {
-    console.log(courseName);
-    fetch(`http://localhost:4000/v1/courses/${courseName}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${
-          JSON.parse(localStorage.getItem("user")).token
-        }`,
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => console.log(result));
-  }, []);
+    const fetchCourseData = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("user")).token;
+        const response = await fetch(
+          `http://localhost:4000/v1/courses/${courseName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const result = await response.json();
+        console.log(result);
+        if (result) {
+          setComments(result?.comments);
+          setSesstions(result?.sessions);
+          setAllData(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourseData();
+  }, [courseName]);
+
+  // console.log("comments", comments);
+  // console.log("sessions", sessions);
+  // console.log("alldata", Alldata);
+
+  const dataUpdatedAt = Alldata?.updatedAt;
+  const dataCreatedAt = Alldata?.createdAt;
+  const milliseconds = Date.parse(dataUpdatedAt);
+  const millisecondss = Date.parse(dataCreatedAt);
+  const UpdatedAt = new Date(milliseconds).toLocaleDateString("fa-IR");
+  const CreatedAt = new Date(millisecondss).toLocaleDateString("fa-IR");
+
   return (
     <div className="flex flex-col font-iransans">
       <TopBr />
       <NavBar />
       <BreadCrumb links={BreadCrumbData} />
-      <CourseMainInfo />
+      <CourseMainInfo Alldata={Alldata} />
       <div className=" p-3 flex flex-col-reverse md:flex-row w-[96%] mx-auto  mt-5 ">
         <div className="w-[100%] md:w-[30%] bg-myWhite  flex flex-col gap-3 p-3 rounded-sm rtl">
           <div className="bg-myWhite flex p-4 items-center justify-center shadow-md shadow-greydark">
-            <button className="bg-greentoond px-12  duration-200 text-myWhite flex py-3 items-center justify-center gap-1 hover:bg-greenyavash cursor-pointer rounded-sm">
-              <PiStudentBold className="text-lg" />
-              <p className="whitespace-nowrap">شما دانشجو این دوره هستی </p>
-            </button>
+            {Alldata?.isUserRegisteredToThisCourse === true ? (
+              <button className="bg-greentoond px-12  duration-200 text-myWhite flex py-3 items-center justify-center gap-1 hover:bg-greenyavash cursor-pointer rounded-sm">
+                <PiStudentBold className="text-lg" />
+                <p className="whitespace-nowrap">شما دانشجو این دوره هستی </p>
+              </button>
+            ) : (
+              <button className="bg-customseven px-12  duration-200 text-myWhite flex py-3 items-center justify-center gap-1 hover:bg-greenyavash cursor-pointer rounded-sm">
+                <PiStudentBold className="text-lg" />
+                <p className="whitespace-nowrap"> شما دانشجو این دور نیستی </p>
+              </button>
+            )}
           </div>
           <div className="flex flex-col bg-myWhite shadow-md shadow-greydark p-1 ">
             <div className="flex flex-col gap-1  items-center justify-center p-2">
               <div className="flex gap-2 p-2 items-center text-black border border-greydarko px-12 rounded-md">
-                <span className="bg-greydarko rounded-md p-3">187</span>
+                <span className="bg-greydarko rounded-md p-3">
+                  {Alldata?.courseStudentsCount
+                    ? Alldata?.courseStudentsCount
+                    : "#"}
+                </span>
                 <p className="whitespace-nowrap">:تعداد دانش آموزان </p>
                 <PiStudentBold className="text-2xl" />
               </div>
@@ -156,20 +200,24 @@ export default function CourseInfo() {
                 </div>
                 <div className="flex flex-col">
                   <p>آخرین بروز رسانی </p>
-                  <p>{date}</p>
+                  <p>{UpdatedAt}</p>
                 </div>
               </div>
               <div className="shadow-md shadow-greydark bg-myWhite flex gap-2 border border-greydark rounded-md px-2 py-2 text-sm whitespace-nowrap ">
                 <div className="w-10 h-10 p-2">
                   <MdOutlineWatchLater className="w-full h-full text-customfive" />
                 </div>
-                <div className="flex flex-col">
+                {/* <div className="flex flex-col">
                   <p>مدت زمان دوره </p>
                   <div className="flex gap-1">
                     {" "}
                     <p>ساعت :</p>
                     <p>{hour.toLocaleString("fa-IR")}</p>
                   </div>
+                </div> */}
+                <div className="flex flex-col">
+                  <p> زمان برگزاری </p>
+                  <p>{CreatedAt}</p>
                 </div>
               </div>
               <div className="shadow-md shadow-greydark bg-myWhite flex gap-2 border border-greydark rounded-md px-2 py-2 text-sm whitespace-nowrap">
@@ -179,7 +227,11 @@ export default function CourseInfo() {
                 <div className="flex flex-col">
                   <p>وضعیت دوره </p>
                   <p className="font-bold text-customfive">
-                    {boxDitals[0].statusCourse}
+                    {Alldata?.isComplete === 1 ? (
+                      <p>دوره اتمام گردیده</p>
+                    ) : (
+                      <p className="text-error">دوره تمام نشده</p>
+                    )}
                   </p>
                 </div>
               </div>
@@ -267,7 +319,7 @@ export default function CourseInfo() {
                 دانلود همگانی ویدیوها{" "}
               </button>
             </div>
-            <FAQAcoordian />
+            <FAQAcoordian sessions={sessions} />
           </div>
           <div className="bg-myWhite w-full h-[200px] rounded-md border border-greydark shadow-lg mt-2 shadow-greydark flex flex-col p-2">
             <div className="flex w-full justify-between items-center p-1">
@@ -301,6 +353,7 @@ export default function CourseInfo() {
               </p>
             </div>
           </div>
+          <SectionComment />
         </div>
       </div>
       <Footer />
