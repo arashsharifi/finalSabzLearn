@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaComment } from "react-icons/fa";
 import { IoCheckmark } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
-export default function SectionComment() {
+export default function SectionComment({ comments }) {
+  useEffect(() => {
+    // console.log("sessions", comments);
+  }, [comments]);
+  console.log("comments", comments);
   const [selectedScore, setSelectedScore] = useState("");
   const [message, setMessage] = useState("");
   const handleChange = (e) => {
@@ -12,8 +16,8 @@ export default function SectionComment() {
   const handleChangeMessage = (event) => {
     setMessage(event.target.value);
   };
-  console.log(selectedScore);
-  console.log(message);
+  // console.log(selectedScore);
+  // console.log(message);
   return (
     <div className="flex flex-col gap-7 bg-myWhite w-full shadow-lg shadow-greydark rtl p-4 rounded-md">
       <div className="flex p-3 justify-start">
@@ -24,48 +28,51 @@ export default function SectionComment() {
           <p className="text-xl font-bold">نظرات</p>
         </div>
       </div>
-      <div className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md">
-        <div className="flex w-[95%] mx-auto bg-customTwo justify-between p-2">
-          <div className="flex gap-2 items-center">
-            <p>sdfsd</p>
-            <p className="bg-customfive text-myWhite rounded-md p-1">qqqqq</p>
-            <p className="">22200022-202202-3</p>
+      {/* {comments.map((items) => (
+        <div className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md">
+          <div className="flex w-[95%] mx-auto bg-customTwo justify-between p-2">
+            <div className="flex gap-2 items-center">
+              <p>{items?.creator === null ? "فلانی/" : items.creator}</p>
+              <p className="bg-customfive text-myWhite rounded-md p-1">خریدار محصول</p>
+              <p className="">22200022-202202-3</p>
+            </div>
+            <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
+              {" "}
+              پاسخ
+            </button>
           </div>
-          <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
-            {" "}
-            پاسخ
-          </button>
+          <p className="mr-6 mt-4">{items?.body} </p>
         </div>
-        <p className="mr-6 mt-4">محتوای کامنت </p>
-      </div>
-      <div className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md">
-        <div className="flex w-[95%] mx-auto bg-customTwo justify-between p-2">
-          <div className="flex gap-2 items-center">
-            <p>sdfsd</p>
-            <p className="bg-greentoond text-myWhite rounded-md p-1">qqqqq</p>
-            <p className="">22200022-202202-3</p>
+      ))} */}
+      {comments.map((items) => {
+        const dataUpdatedAt = items?.updatedAt;
+        const milliseconds = dataUpdatedAt ? Date.parse(dataUpdatedAt) : null;
+        const UpdatedAt = milliseconds
+          ? new Date(milliseconds).toLocaleDateString("fa-IR")
+          : "000-000-000";
+
+        return (
+          <div
+            key={items.id}
+            className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md"
+          >
+            <div className="flex w-[95%] mx-auto  justify-between p-2">
+              <div className="flex gap-2 items-center">
+                <p>{items?.creator === null ? "فلانی/" : items.creator}</p>
+                <p className="bg-customfive text-myWhite rounded-md p-1">
+                  خریدار محصول
+                </p>
+                <p className="">{UpdatedAt}</p>
+              </div>
+              <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
+                پاسخ
+              </button>
+            </div>
+            <p className="mr-6 mt-4">{items?.body}</p>
           </div>
-          <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
-            {" "}
-            پاسخ
-          </button>
-        </div>
-        <p className="mr-6 mt-4">محتوای کامنت </p>
-      </div>
-      <div className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md">
-        <div className="flex w-[95%] mx-auto bg-customTwo justify-between p-2">
-          <div className="flex gap-2 items-center">
-            <p>sdfsd</p>
-            <p className="bg-greentoond text-myWhite rounded-md p-1">qqqqq</p>
-            <p className="">22200022-202202-3</p>
-          </div>
-          <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
-            {" "}
-            پاسخ
-          </button>
-        </div>
-        <p className="mr-6 mt-4">محتوای کامنت </p>
-      </div>
+        );
+      })}
+
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <p className="font-bold text-black mb-4">قوانین ثبت دیدگاه </p>
