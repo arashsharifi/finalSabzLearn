@@ -12,6 +12,8 @@ export default {
       customseven: "#6a89cc",
       customeigth: "#d9e6e6",
       customenine: "#dff9fb",
+      custometen: "#FFF44F",
+      customeeleven: "#FFAA1D",
       grey: "#ecf0f1",
       greydark: "#bdc3c7",
       greydarko: "#95afc0",
