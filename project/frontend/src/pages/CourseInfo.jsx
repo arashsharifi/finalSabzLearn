@@ -72,7 +72,7 @@ export default function CourseInfo() {
     fetchCourseData();
   }, [courseName]);
 
-  // console.log("comments", comments);
+
   // console.log("sessions", sessions);
   // console.log("alldata", Alldata);
 
@@ -353,7 +353,7 @@ export default function CourseInfo() {
               </p>
             </div>
           </div>
-          <SectionComment />
+          <SectionComment comments={comments}/>
         </div>
       </div>
       <Footer />

@@ -5,7 +5,7 @@ import { AccordionData } from "../data";
 
 export default function FAQAcoordian({ sessions }) {
   useEffect(() => {
-    console.log("sessions", sessions);
+    // console.log("sessions", sessions);
   }, [sessions]);
 
   console.log(sessions.length);
