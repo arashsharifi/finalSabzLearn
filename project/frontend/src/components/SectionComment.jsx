@@ -44,7 +44,7 @@ export default function SectionComment({ comments }) {
           <p className="mr-6 mt-4">{items?.body} </p>
         </div>
       ))} */}
-      {comments.map((items) => {
+      {/* {comments.map((items) => {
         const dataUpdatedAt = items?.updatedAt;
         const milliseconds = dataUpdatedAt ? Date.parse(dataUpdatedAt) : null;
         const UpdatedAt = milliseconds
@@ -71,8 +71,44 @@ export default function SectionComment({ comments }) {
             <p className="mr-6 mt-4">{items?.body}</p>
           </div>
         );
-      })}
+      })} */}
 
+      {comments.length === 0 ? (
+        <div className="w-full bg-custometen border border-customeeleven rounded-md p-3">
+          <p className="text-center  font-bold">
+            کامنتی برای این دوره موجود نمی‌باشد
+          </p>
+        </div>
+      ) : (
+        comments.map((items) => {
+          const dataUpdatedAt = items?.updatedAt;
+          const milliseconds = dataUpdatedAt ? Date.parse(dataUpdatedAt) : null;
+          const UpdatedAt = milliseconds
+            ? new Date(milliseconds).toLocaleDateString("fa-IR")
+            : "000-000-000";
+
+          return (
+            <div
+              key={items.id}
+              className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md"
+            >
+              <div className="flex w-[95%] mx-auto justify-between p-2">
+                <div className="flex gap-2 items-center">
+                  <p>{items?.creator === null ? "فلانی/" : items.creator}</p>
+                  <p className="bg-customfive text-myWhite rounded-md p-1">
+                    خریدار محصول
+                  </p>
+                  <p className="">{UpdatedAt}</p>
+                </div>
+                <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
+                  پاسخ
+                </button>
+              </div>
+              <p className="mr-6 mt-4">{items?.body}</p>
+            </div>
+          );
+        })
+      )}
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <p className="font-bold text-black mb-4">قوانین ثبت دیدگاه </p>
