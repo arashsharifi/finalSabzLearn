@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { FaTelegram } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { IoLogoTwitter } from "react-icons/io5";
+import AuthContext from "../context/authContext";
 export default function CourseMainInfo({ Alldata }) {
+
   useEffect(() => {
     // console.log("alldata", Alldata);
   }, [Alldata]);
