@@ -53,7 +53,7 @@ export default function CourseInfo() {
           `http://localhost:4000/v1/courses/${courseName}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token === null ? null : token}`,
             },
           }
         );
@@ -72,9 +72,8 @@ export default function CourseInfo() {
     fetchCourseData();
   }, [courseName]);
 
-
   // console.log("sessions", sessions);
-  // console.log("alldata", Alldata);
+  console.log("alldata", Alldata);
 
   const dataUpdatedAt = Alldata?.updatedAt;
   const dataCreatedAt = Alldata?.createdAt;
@@ -353,7 +352,7 @@ export default function CourseInfo() {
               </p>
             </div>
           </div>
-          <SectionComment comments={comments}/>
+          <SectionComment comments={comments} />
         </div>
       </div>
       <Footer />

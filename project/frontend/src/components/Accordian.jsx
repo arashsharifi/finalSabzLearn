@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { FaMinus } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa6";
+
 export default function Accordian({ title, desc, time, index }) {
   const [accordianOpen, setAccordianOpen] = useState(false);
+
   return (
     <div
       onClick={() => setAccordianOpen(!accordianOpen)}
