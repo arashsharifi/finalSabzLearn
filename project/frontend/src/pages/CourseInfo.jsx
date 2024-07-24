@@ -72,8 +72,51 @@ export default function CourseInfo() {
     fetchCourseData();
   }, [courseName]);
 
-  // console.log("sessions", sessions);
-  console.log("alldata", Alldata);
+  // console.log("alldata", Alldata);
+  // const submitCommentHandler = (newComent) => {
+  //   const localStorageData = JSON.parse(localStorage.getItem("user"));
+  //   fetch(`http://localhost:4000/v1/comments`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${localStorageData.token}`,
+  //     },
+  //     body: JSON.stringify({
+  //       body: newComent,
+  //       courseShortname: courseName,
+  //       score: "3",
+  //     }),
+  //   }).then((res) => console.log(res));
+  // };
+
+  const submitCommentHandler = async (newComment) => {
+    const localStorageData = JSON.parse(localStorage.getItem("user"));
+
+    try {
+      const response = await fetch(`http://localhost:4000/v1/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorageData.token}`,
+        },
+        body: JSON.stringify({
+          body: newComment,
+          courseShortName: courseName,
+          score: 3,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
 
   const dataUpdatedAt = Alldata?.updatedAt;
   const dataCreatedAt = Alldata?.createdAt;
@@ -352,7 +395,10 @@ export default function CourseInfo() {
               </p>
             </div>
           </div>
-          <SectionComment comments={comments} />
+          <SectionComment
+            comments={comments}
+            submitCommentHandler={submitCommentHandler}
+          />
         </div>
       </div>
       <Footer />

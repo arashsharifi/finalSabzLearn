@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaComment } from "react-icons/fa";
 import { IoCheckmark } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
-export default function SectionComment({ comments }) {
+export default function SectionComment({ comments,submitCommentHandler }) {
   useEffect(() => {
     // console.log("sessions", comments);
   }, [comments]);
@@ -28,51 +28,6 @@ export default function SectionComment({ comments }) {
           <p className="text-xl font-bold">نظرات</p>
         </div>
       </div>
-      {/* {comments.map((items) => (
-        <div className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md">
-          <div className="flex w-[95%] mx-auto bg-customTwo justify-between p-2">
-            <div className="flex gap-2 items-center">
-              <p>{items?.creator === null ? "فلانی/" : items.creator}</p>
-              <p className="bg-customfive text-myWhite rounded-md p-1">خریدار محصول</p>
-              <p className="">22200022-202202-3</p>
-            </div>
-            <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
-              {" "}
-              پاسخ
-            </button>
-          </div>
-          <p className="mr-6 mt-4">{items?.body} </p>
-        </div>
-      ))} */}
-      {/* {comments.map((items) => {
-        const dataUpdatedAt = items?.updatedAt;
-        const milliseconds = dataUpdatedAt ? Date.parse(dataUpdatedAt) : null;
-        const UpdatedAt = milliseconds
-          ? new Date(milliseconds).toLocaleDateString("fa-IR")
-          : "000-000-000";
-
-        return (
-          <div
-            key={items.id}
-            className="flex flex-col gap-2 bg-grey rounded-md p-3 border-greydoubledarko shadow-greydark shadow-md"
-          >
-            <div className="flex w-[95%] mx-auto  justify-between p-2">
-              <div className="flex gap-2 items-center">
-                <p>{items?.creator === null ? "فلانی/" : items.creator}</p>
-                <p className="bg-customfive text-myWhite rounded-md p-1">
-                  خریدار محصول
-                </p>
-                <p className="">{UpdatedAt}</p>
-              </div>
-              <button className="bg-myWhite border rounded-md p-1 w-14 h-8">
-                پاسخ
-              </button>
-            </div>
-            <p className="mr-6 mt-4">{items?.body}</p>
-          </div>
-        );
-      })} */}
-
       {comments.length === 0 ? (
         <div className="w-full bg-custometen border border-customeeleven rounded-md p-3">
           <p className="text-center  font-bold">
@@ -180,8 +135,9 @@ export default function SectionComment({ comments }) {
             ></textarea>
           </div>
           <button
-            type="submit"
+   
             className="bg-greentoond px-4  duration-200 text-myWhite flex py-2 items-center justify-center gap-1 hover:bg-greenyavash cursor-pointer rounded-md w-[20%]"
+            onClick={()=>submitCommentHandler(message)}
           >
             <p>ارسال</p>
           </button>
