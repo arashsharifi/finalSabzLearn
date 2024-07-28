@@ -29,13 +29,15 @@ import { BreadCrumbData, lessonStatus, randomData } from "../data";
 import { useParams } from "react-router-dom";
 import SectionComment from "../components/SectionComment";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function CourseInfo() {
   const [boxDitals, setBoxDitails] = useState(lessonStatus);
   const [randomDatas, setRandomDatas] = useState(randomData);
 
-  const milliseconds1 = Number(boxDitals[0].update);
-
-  const hour = Number(boxDitals[0].hourCourse);
+  // const milliseconds1 = Number(boxDitals[0].update);
+  // const hour = Number(boxDitals[0].hourCourse);
 
   //state database
   const [comments, setComments] = useState([]);
@@ -89,7 +91,9 @@ export default function CourseInfo() {
   //   }).then((res) => console.log(res));
   // };
 
-  const submitCommentHandler = async (newComment) => {
+  const submitCommentHandler = async (newComment, newScore) => {
+    // console.log("fff", newComment);
+    // console.log("ddd", newScore);
     const localStorageData = JSON.parse(localStorage.getItem("user"));
 
     try {
@@ -102,17 +106,30 @@ export default function CourseInfo() {
         body: JSON.stringify({
           body: newComment,
           courseShortName: courseName,
-          score: 3,
+          //دسترسی ندارم کار ادمینه که accept کنه
+          // answer: 1,
+          // isAnswer: 1,
+          score: newScore,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Something went wrong");
+      } else {
+        const data = await response.json();
+        console.log(data);
+        toast.warn('کامنت شما با موفقیت ثبت گردید مرسی', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       }
-
-      const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -402,6 +419,7 @@ export default function CourseInfo() {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
@@ -410,3 +428,15 @@ export default function CourseInfo() {
 // export default function CourseInfo() {
 //   return <div>CourseInfo</div>;
 // }
+
+// toast.warn('🦄 Wow so easy!', {
+//   position: "top-center",
+//   autoClose: 5000,
+//   hideProgressBar: false,
+//   closeOnClick: true,
+//   pauseOnHover: true,
+//   draggable: true,
+//   progress: undefined,
+//   theme: "light",
+//   transition: Bounce,
+//   });
