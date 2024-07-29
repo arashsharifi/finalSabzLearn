@@ -11,8 +11,8 @@ export default function App() {
   const router = useRoutes(routes);
 
   const login = useCallback((userInfos, token) => {
-    console.log(token);
-    console.log(userInfos);
+    // console.log(token);
+    // console.log(userInfos);
     setToken(token);
     SetIsLoggedIn(true);
     setUserInfos(userInfos);
@@ -28,7 +28,7 @@ export default function App() {
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
     if (localStorageData) {
-      console.log("arash");
+      // console.log("arash");
       fetch("http://localhost:4000/v1/auth/me", {
         headers: {
           Authorization: `Bearer ${localStorageData.token}`,
@@ -42,7 +42,7 @@ export default function App() {
     }
   }, [token]);
 
-  console.log("userInfos", userInfos);
+  // console.log("userInfos", userInfos);
   return (
     <AuthContext.Provider
       value={{

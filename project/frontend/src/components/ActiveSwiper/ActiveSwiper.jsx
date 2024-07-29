@@ -19,7 +19,7 @@ export default function ActiveSwiper({ dataSwiper }) {
   const [data, setData] = useState(dataSwiper);
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
-  console.log(data);
+  
   return (
     <div className=" flex justify-center items-center h-[75vh] m-8">
       <Swiper
