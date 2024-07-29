@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SectionHeader from "./SectionHeader";
 
 import { lasCourseData } from "../data";
@@ -6,6 +6,11 @@ import CourseBox from "./CourseBox";
 
 export default function LastCourses() {
   const [coursesData, setCoursesData] = useState(lasCourseData);
+  useEffect(() => {
+    fetch("http://localhost:4000/v1/courses")
+      .then((res) => res.json())
+      .then((result) => console.log(result));
+  }, []);
 
   return (
     <div className="flex flex-col rtl m-3">
