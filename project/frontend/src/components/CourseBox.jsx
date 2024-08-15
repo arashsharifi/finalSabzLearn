@@ -5,26 +5,34 @@ import { GiTeacher } from "react-icons/gi";
 import CircleSpinner from "./CircleSpinner/CircleSpinner";
 import ButtonCustomOne from "./ButtonCustomOne";
 import StarRating from "./StarRating";
-
-export default function CourseBox({courseData}) {
-  const [data,setData]=useState([])
+import { Link } from "react-router-dom";
+export default function CourseBox({ courseData }) {
+  const [data, setData] = useState([]);
   // useEffect(()=>{
 
   // },[coursesData])
-  console.log(courseData)
+  // console.log(courseData)
 
-  const countStudent=100
+  const countStudent = 100;
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
-  return (
 
+  const getHrefPath = (href) => {
+    if (href && !href.includes("/course-info/")) {
+      return `/course-info/${href}`;
+    } else {
+      return href;
+    }
+  };
+
+  return (
     <div
       key={courseData?._id}
       className="bg-myWhite w-full  md:w-[85%] flex flex-col gap-2 p-4 rounded-lg duration-300 hover:shadow-custom"
     >
       <div className="w-[98%]  mx-auto rounded-lg z-20">
         <img
-          className="w-full h-full rounded-lg"
+          className="w-full h-auto rounded-lg"
           src={courseData?.cover}
           alt="nooot"
           onLoad={inImageLoaded}
@@ -59,15 +67,21 @@ export default function CourseBox({courseData}) {
             <p>{countStudent}</p>
             <FaUsersLine />
           </div>
-          <p className="text-xl">{courseData?.price}</p>
+          <div className="w-full flex justify-between ">
+            <p>تومان:</p>
+            <p className="text-xl">
+              {courseData?.price.toLocaleString("fa-IR")}
+            </p>
+          </div>
         </div>
         <div>
-          <ButtonCustomOne>مشاهده جزئیات بیشتر </ButtonCustomOne>
+          <Link to={getHrefPath(courseData?.shortName)}>
+            <ButtonCustomOne>مشاهده جزئیات بیشتر </ButtonCustomOne>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
-
 
 // toLocaleString("fa-IR")

@@ -13,6 +13,14 @@ export default function LastCourses() {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  const getHrefPath = (href) => {
+    if (href && !href.includes("/course-info/")) {
+      return `/course-info/${href}`;
+    } else {
+      return href;
+    }
+  };
+
   // console.log(coursesData)
   return (
     <div className="flex flex-col rtl m-3">
