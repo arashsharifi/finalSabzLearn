@@ -5,13 +5,15 @@ import { lasCourseData } from "../data";
 import CourseBox from "./CourseBox";
 
 export default function LastCourses() {
-  const [coursesData, setCoursesData] = useState(lasCourseData);
+  const [coursesData, setCoursesData] = useState([]);
   useEffect(() => {
     fetch("http://localhost:4000/v1/courses")
       .then((res) => res.json())
-      .then((result) => console.log(result));
+      .then((result) => setCoursesData(result.slice(0, 6))) 
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  // console.log(coursesData)
   return (
     <div className="flex flex-col rtl m-3">
       <SectionHeader
@@ -21,7 +23,7 @@ export default function LastCourses() {
       />
       <div className=" bg-customeigth bg-cover bg-center rounded-lg grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10 p-4 mx-4 ">
         {coursesData.map((courseData) => (
-          <CourseBox key={courseData.id} {...courseData} />
+          <CourseBox key={courseData._id} courseData={courseData} />
         ))}
       </div>
     </div>

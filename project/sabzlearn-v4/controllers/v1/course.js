@@ -134,6 +134,55 @@ exports.update = async (req, res, next) => {
   }
 };
 
+// exports.getAll = async (req, res, next) => {
+//   try {
+//     const courses = await courseModel
+//       .find()
+//       .populate("creator", "-password")
+//       .populate("categoryID")
+//       .lean()
+//       .sort({ _id: -1 });
+
+//     if (!courses) {
+//       return res.status(404).json({ message: "No Course Available!" });
+//     }
+
+//     const registers = await courseUserModel.find({}).lean();
+//     const comments = await commentModel.find().lean();
+
+//     let allCourses = [];
+//     courses.forEach((course) => {
+//       let courseTotalScore = 5;
+//       let courseRegisters = registers.filter(
+//         (register) => register.course.toString() === course._id.toString()
+//       );
+
+//       let courseScores = comments.filter(
+//         (comment) => comment.course.toString() === course._id.toString()
+//       );
+
+//       courseScores.forEach((comment) => {
+//         courseTotalScore += Number(comment.score);
+//       });
+
+//       allCourses.push({
+//         ...course,
+//         categoryID: course.categoryID,
+//         creator: course.creator.name,
+//         registers: courseRegisters.length,
+//         courseAverageScore: Math.floor(
+//           courseTotalScore / (courseScores.length + 1)
+//         ),
+//       });
+//     });
+
+//     // return res.json(allCourses);
+//     console.log(allCourses)
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 exports.getAll = async (req, res, next) => {
   try {
     const courses = await courseModel
@@ -168,7 +217,7 @@ exports.getAll = async (req, res, next) => {
       allCourses.push({
         ...course,
         categoryID: course.categoryID,
-        creator: course.creator.name,
+        creator: course.creator ? course.creator.name : "Unknown",
         registers: courseRegisters.length,
         courseAverageScore: Math.floor(
           courseTotalScore / (courseScores.length + 1)
@@ -181,6 +230,7 @@ exports.getAll = async (req, res, next) => {
     next(error);
   }
 };
+
 
 exports.getOne = async (req, res, next) => {
   try {

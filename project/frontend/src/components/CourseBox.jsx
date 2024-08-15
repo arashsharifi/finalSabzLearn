@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUsersLine } from "react-icons/fa6";
 import { PiStarThin } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
@@ -6,26 +6,26 @@ import CircleSpinner from "./CircleSpinner/CircleSpinner";
 import ButtonCustomOne from "./ButtonCustomOne";
 import StarRating from "./StarRating";
 
-export default function CourseBox({
-  id,
-  img,
-  nameC,
-  nameT,
-  rate,
-  countStudent,
-  price,
-}) {
+export default function CourseBox({courseData}) {
+  const [data,setData]=useState([])
+  // useEffect(()=>{
+
+  // },[coursesData])
+  console.log(courseData)
+
+  const countStudent=100
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
   return (
+
     <div
-      key={id}
+      key={courseData?._id}
       className="bg-myWhite w-full  md:w-[85%] flex flex-col gap-2 p-4 rounded-lg duration-300 hover:shadow-custom"
     >
       <div className="w-[98%]  mx-auto rounded-lg z-20">
         <img
           className="w-full h-full rounded-lg"
-          src={img}
+          src={courseData?.cover}
           alt="nooot"
           onLoad={inImageLoaded}
         />
@@ -33,7 +33,7 @@ export default function CourseBox({
         {/* {isLoaderShow ? (
           <img
             className="w-full h-full rounded-lg"
-            src={img}
+            src={coursesData?.cover}
             alt="nooot"
             onLoad={inImageLoaded}
           />
@@ -43,22 +43,23 @@ export default function CourseBox({
       </div>
 
       <div className="flex flex-col gap-3 pr-4">
-        <h1 className="text-xl text-black m-2"> {nameC} </h1>
+        <h1 className="text-xl text-black m-2"> {courseData?.name} </h1>
+
         <div className="w-full  mx-auto flex justify-between">
           <div className="flex  gap-2 w-full  items-center p-3">
-            <p> {nameT} </p>
+            <p> {courseData?.creator} </p>
             <GiTeacher />
           </div>
           <div className="mt-4">
-            <StarRating rate={rate} />
+            <StarRating rate={3} />
           </div>
         </div>
         <div className="w-full  mx-auto flex items-center">
           <div className="flex  gap-2 w-full items-center p-3">
-            <p>{countStudent.toLocaleString("fa-IR")} </p>
+            <p>{countStudent}</p>
             <FaUsersLine />
           </div>
-          <p className="text-xl">{price.toLocaleString("fa-IR")}</p>
+          <p className="text-xl">{courseData?.price}</p>
         </div>
         <div>
           <ButtonCustomOne>مشاهده جزئیات بیشتر </ButtonCustomOne>
@@ -67,3 +68,6 @@ export default function CourseBox({
     </div>
   );
 }
+
+
+// toLocaleString("fa-IR")
