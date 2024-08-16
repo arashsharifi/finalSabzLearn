@@ -378,6 +378,60 @@ exports.register = async (req, res, next) => {
   }
 };
 
+// exports.getCategoryCourses = async (req, res, next) => {
+//   try {
+//     await courseModel.getCategoryCoursesValidation(req.params).catch((err) => {
+//       err.statusCode = 400;
+//       throw err;
+//     });
+
+//     const { categoryName } = req.params;
+//     const category = await categoryModel.find({ name: categoryName });
+//     if (category.length) {
+//       const categoryCourses = await courseModel
+//         .find({
+//           categoryID: category[0]._id,
+//         })
+//         .populate("creator")
+//         .lean();
+
+//       const registers = await courseUserModel.find({}).lean();
+//       const comments = await commentModel.find().lean();
+
+//       let allCourses = [];
+//       categoryCourses.forEach((course) => {
+//         let courseTotalScore = 5;
+//         let courseRegisters = registers.filter(
+//           (register) => register.course.toString() === course._id.toString()
+//         );
+
+//         let courseScores = comments.filter(
+//           (comment) => comment.course.toString() === course._id.toString()
+//         );
+
+//         courseScores.forEach((comment) => {
+//           courseTotalScore += Number(comment.score);
+//         });
+
+//         allCourses.push({
+//           ...course,
+//           categoryID: course.categoryID.title,
+//           creator: course.creator.name,
+//           registers: courseRegisters.length,
+//           courseAverageScore: Math.floor(
+//             courseTotalScore / (courseScores.length + 1)
+//           ),
+//         });
+//       });
+//       res.json(allCourses);
+//     } else {
+//       res.json([]);
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 exports.getCategoryCourses = async (req, res, next) => {
   try {
     await courseModel.getCategoryCoursesValidation(req.params).catch((err) => {
@@ -400,13 +454,17 @@ exports.getCategoryCourses = async (req, res, next) => {
 
       let allCourses = [];
       categoryCourses.forEach((course) => {
+        if (!course || !course.creator || !course.categoryID) {
+          return; // اگر داده‌ای null بود، از آن عبور کنید
+        }
+
         let courseTotalScore = 5;
         let courseRegisters = registers.filter(
-          (register) => register.course.toString() === course._id.toString()
+          (register) => register.course && register.course.toString() === course._id.toString()
         );
 
         let courseScores = comments.filter(
-          (comment) => comment.course.toString() === course._id.toString()
+          (comment) => comment.course && comment.course.toString() === course._id.toString()
         );
 
         courseScores.forEach((comment) => {
@@ -415,8 +473,8 @@ exports.getCategoryCourses = async (req, res, next) => {
 
         allCourses.push({
           ...course,
-          categoryID: course.categoryID.title,
-          creator: course.creator.name,
+          categoryID: course.categoryID.title || "Unknown", // در صورت عدم وجود title مقدار پیش‌فرض بدهید
+          creator: course.creator.name || "Unknown", // در صورت عدم وجود name مقدار پیش‌فرض بدهید
           registers: courseRegisters.length,
           courseAverageScore: Math.floor(
             courseTotalScore / (courseScores.length + 1)
@@ -431,6 +489,7 @@ exports.getCategoryCourses = async (req, res, next) => {
     next(error);
   }
 };
+
 
 exports.remove = async (req, res, next) => {
   try {
