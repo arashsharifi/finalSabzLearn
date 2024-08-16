@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -9,8 +9,38 @@ import { CiSearch } from "react-icons/ci";
 
 import Dropdown from "../components/Dropdown";
 import { swiperCourseData } from "../data";
+import { useParams } from "react-router-dom";
 
 export default function Category() {
+  const[categoryDatas,setCategoryDatas]=useState([])
+  const {categoryName}=useParams()
+
+  // console.log(categoryName)
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("user")).token;
+        const response = await fetch(
+          `http://localhost:4000/v1/courses/category/${categoryName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token === null ? null : token}`,
+            },
+          }
+        );
+        const result = await response.json();
+        console.log(result);
+        if (result) {
+          setCategoryDatas(result)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCourseData();
+  }, [categoryName]);
+// console.log(categoryDatas)
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -40,7 +70,7 @@ export default function Category() {
           </span>
         </div>
       </div>
-      <ActiveSwiperEfect dataSwiper={swiperCourseData} />
+      <ActiveSwiperEfect dataSwiper={categoryDatas} />
       <Footer />
     </div>
   );

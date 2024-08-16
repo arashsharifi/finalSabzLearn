@@ -60,6 +60,8 @@ export default function NavLinks() {
     return <div>No data available</div>;
   }
 
+  console.log(menuData);
+
   const linksNavDataaaa = menuData.map((item, index) => ({
     id: item._id,
     name: item.title,
@@ -82,26 +84,41 @@ export default function NavLinks() {
       return href;
     }
   };
+  const getHrefPathCategory = (href) => {
+    if (href && !href.includes("/category-info/")) {
+      return `/category-info/${href}`;
+    } else {
+      return href;
+    }
+  };
   return (
     <div className="w-full flex flex-col md:flex-row justify-between text-sm">
       {linksNavDataaaa.map((link) => (
         <div key={link.id}>
-          <div className="px-3 text-left md:cursor-pointer  group font-iransans">
-            <h1
-              onClick={() => {
-                heading !== link.name ? setHeading(link.name) : setHeading("");
-                setSubHeading("");
-              }}
-              className="flex bg-grey hover:bg-greydark md:hover:bg-myWhite duration-300 p-3 md:p-0 m-3 md:m-0 rounded-xl md:rounded-none md:bg-myWhite justify-between items-center md:pr-0 pr-5 py-7 text-customfour"
-            >
-              {link.name}
-              <span className="text-xl md:mt-1 md:ml-2 md:hidden inline">
-                {heading === link.name ? <IoIosArrowDown /> : <IoIosArrowUp />}
-              </span>
-              <span className="text-xl hidden md:block md:mt-1 md:ml-2">
-                <IoIosArrowDown />
-              </span>
-            </h1>
+          <Link to={getHrefPathCategory(link?.href)}>
+          <div className="px-3 text-left md:cursor-pointer   group font-iransans">
+              <h1
+                onClick={() => {
+                  heading !== link.name
+                    ? setHeading(link.name)
+                    : setHeading("");
+                  setSubHeading("");
+                }}
+                className="flex bg-grey hover:bg-greydark  md:hover:bg-myWhite duration-300 p-3 md:p-0 m-3 md:m-0 rounded-xl md:rounded-none md:bg-myWhite justify-between items-center md:pr-0 pr-5 py-7 text-customfour"
+              >
+                {link.name}
+                <span className="text-xl md:mt-1 md:ml-2 md:hidden inline">
+                  {heading === link.name ? (
+                    <IoIosArrowDown />
+                  ) : (
+                    <IoIosArrowUp />
+                  )}
+                </span>
+                <span className="text-xl hidden md:block md:mt-1 md:ml-2">
+                  <IoIosArrowDown />
+                </span>
+              </h1>
+
             {link.submenu && link.sublinks.length > 0 && (
               <div>
                 <div className="absolute top-28 hidden group-hover:md:block hover:md:block">
@@ -124,6 +141,7 @@ export default function NavLinks() {
               </div>
             )}
           </div>
+          </Link>
           {/* mobile menus */}
           <div className="flex flex-col md:hidden ">
             <div
