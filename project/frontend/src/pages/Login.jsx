@@ -24,7 +24,7 @@ import {
 export default function Login() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isGoogleRecaptchaVerify, setIsGoogleRecaptchaVerify] = useState(false);
+  const [isGoogleRecaptchaVerify, setIsGoogleRecaptchaVerify] = useState(true);
 
   const [formState, onInputsHandler] = useForm(
     {
