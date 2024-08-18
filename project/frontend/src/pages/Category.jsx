@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -10,10 +10,17 @@ import { CiSearch } from "react-icons/ci";
 import Dropdown from "../components/Dropdown";
 import { swiperCourseData } from "../data";
 import { useParams } from "react-router-dom";
+import AuthContext from "../context/authContext";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Category() {
-  const[categoryDatas,setCategoryDatas]=useState([])
-  const {categoryName}=useParams()
+  const authContext = useContext(AuthContext);
+  const isUserInfosEmpty = Object.keys(authContext.userInfos).length === 0;
+  console.log("infoسس", isUserInfosEmpty);
+  const [categoryDatas, setCategoryDatas] = useState([]);
+  const { categoryName } = useParams();
 
   // console.log(categoryName)
   useEffect(() => {
@@ -31,16 +38,30 @@ export default function Category() {
         const result = await response.json();
         console.log(result);
         if (result) {
-          setCategoryDatas(result)
+          setCategoryDatas(result);
         }
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchCourseData();
-  }, [categoryName]);
-// console.log(categoryDatas)
+    const timer = setTimeout(() => {
+      if (isUserInfosEmpty) {
+        toast.error(`${errorData}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [categoryName, isUserInfosEmpty]);
+  // console.log(categoryDatas)
   return (
     <div className="flex flex-col">
       <TopBr />
@@ -70,8 +91,21 @@ export default function Category() {
           </span>
         </div>
       </div>
+      <div>
+      {isUserInfosEmpty ? (
+        <p className="text-center mx-auto text-error font-bold text-xl border border-error rounded-md p-3 mt-10 w-[90%]">
+          شما به دیدن دسته بندی ها دسترسی ندارید لطفا لاگین کنید
+        </p>
+      ) : categoryDatas.length === 0 ? (
+        <p className="text-center text-customeeleven border border-customeeleven rounded-md mt-10 mx-auto font-bold text-xl p-3">
+          فعلا آموزشی برای این دسته بندی نداریم 
+        </p>
+      ) : (
       <ActiveSwiperEfect dataSwiper={categoryDatas} />
+      )}
+      </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }
