@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCart from "../../components/ProductCart";
 import TopBr from "../../components/TopBr";
 import NavBar from "../../components/NavBar";
@@ -11,12 +11,55 @@ import ReactPaginate from "react-paginate";
 
 export default function CoursesAll() {
   const [serachTrem, setSearchTrem] = useState("");
+  const [dataAllCourse,setDataAllCourse] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("user")).token;
+        const response = await fetch(
+          `http://localhost:4000/v1/courses`,
+          {
+            headers: {
+              Authorization: `Bearer ${token === null ? null : token}`,
+            },
+          }
+        );
+        const result = await response.json();
+        console.log(result);
+        if (result) {
+          setDataAllCourse(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCourseData();
+   
+  }, []);
+  console.log(typeof dataAllCourse)
 
-  const searchdeProduct = paginationAllcourseData.filter((item) => {
+  // const searchdeProduct = paginationAllcourseData.filter((item) => {
+  //   if (serachTrem.value === "") return item;
+  //   if (item.nameC.toLowerCase().includes(serachTrem.toLowerCase()))
+  //     return item;
+  // });
+
+  // const productPerPage = 8;
+  // const visitedPage = pageNumber * productPerPage;
+  // const displayPage = searchdeProduct.slice(
+  //   visitedPage,
+  //   visitedPage + productPerPage
+  // );
+  // const pageCount = Math.ceil(searchdeProduct.length / productPerPage);
+  // console.log(pageCount);
+  // const changePage = ({ selected }) => {
+  //   setPageNumber(selected);
+  // };
+
+  const searchdeProduct = dataAllCourse.filter((item) => {
     if (serachTrem.value === "") return item;
-    if (item.nameC.toLowerCase().includes(serachTrem.toLowerCase()))
-      return item;
+    if (item.name.toLowerCase().includes(serachTrem.toLowerCase())) return item;
   });
 
   const productPerPage = 8;
@@ -26,7 +69,7 @@ export default function CoursesAll() {
     visitedPage + productPerPage
   );
   const pageCount = Math.ceil(searchdeProduct.length / productPerPage);
-  console.log(pageCount);
+
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   };
