@@ -74,7 +74,7 @@ export default function CourseInfo() {
     fetchCourseData();
   }, [courseName]);
 
-  // console.log("alldata", Alldata);
+  console.log("alldata", Alldata);
   // const submitCommentHandler = (newComent) => {
   //   const localStorageData = JSON.parse(localStorage.getItem("user"));
   //   fetch(`http://localhost:4000/v1/comments`, {
@@ -119,7 +119,7 @@ export default function CourseInfo() {
       } else {
         const data = await response.json();
         console.log(data);
-        toast.warn('کامنت شما با موفقیت ثبت گردید مرسی', {
+        toast.warn("کامنت شما با موفقیت ثبت گردید مرسی", {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -128,7 +128,7 @@ export default function CourseInfo() {
           draggable: true,
           progress: undefined,
           theme: "light",
-          });
+        });
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -386,14 +386,18 @@ export default function CourseInfo() {
                 <FaChalkboardTeacher />
                 <p>مدرس</p>
               </button>
-              <div className="flex justify-between   w-[70%] md:w-[50%] lg:w-[40%]">
-                <div className="flex flex-col  items-center justify-center p-1">
+              <div className="flex justify-evenly w-[70%] md:w-[50%] lg:w-[60%]">
+                <div className="w-[50%]  flex flex-col gap-2  items-center justify-center p-1">
                   <p className="text-sm lg:text-[17px] whitespace-nowrap">
-                    آرش امیر شریفی تکمه داش{" "}
+                    {Alldata?.creator?.name ? Alldata?.creator?.name : "no person"}
                   </p>
                   <p className="border-b-2 border-customfour">
                     Front-End developer
                   </p>
+                  <div className="border-b-2 border-customfour flex gap-2 mr-4">
+                    <p>ایمیل:</p>
+                    <p>{Alldata?.creator?.email ?Alldata?.creator?.email :"nonegmail.com"}</p>
+                  </div>
                 </div>
                 <div className="w-[90px] h-[120px] border-2 border-customfour overflow-hidden rounded-md">
                   <img
