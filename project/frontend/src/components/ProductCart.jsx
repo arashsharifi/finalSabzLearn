@@ -46,10 +46,10 @@ export default function ProductCart({ data }) {
           <div className="flex items-center gap-2 ">
             <PiUsersFourFill />
             <p className="text-lg font-bold">
-              {items1}
+              {items1.toLocaleString("fa-IR")}
             </p>
           </div>
-          <p className="font-bold">{data.price}</p>
+          <p className="font-bold">{data.price.toLocaleString("fa-IR")}</p>
         </div>
         <Link to={getHrefPath(data.shortName)} >
         <button
