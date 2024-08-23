@@ -31,8 +31,8 @@ export default function ArticleCart({ data }) {
 
   return (
 
-    <div className="flex flex-col  justify-between gap-5 bg-customenine rounded-lg p-3 shadow-xl border border-customsix w-[90%] ">
-      <div className="w-[90%] h-[300px] mx-auto">
+    <div className="flex flex-col  justify-between gap-5 bg-customenine rounded-lg p-3 shadow-xl border border-customsix w-[100%]  2xl:w-[90%]  ">
+      <div className="w-[90%] h-[250px] mx-auto">
         <Link
           className="cursor-pointer"
           to={getHrefArticlePath(data?.shortName)}

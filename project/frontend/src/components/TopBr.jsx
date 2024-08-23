@@ -4,8 +4,8 @@ import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { dataAboutCategory } from "../data";
 import { Link } from "react-router-dom";
-
-export default function TopBr() {
+import { memo } from "react";
+export default memo(function TopBr() {
   const [category, setCategory] = useState(dataAboutCategory);
   let [open, setOpen] = useState(false);
   const [menuData, setMenuData] = useState([]);
@@ -89,4 +89,4 @@ export default function TopBr() {
       </div>
     </div>
   );
-}
+});
