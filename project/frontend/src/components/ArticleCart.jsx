@@ -8,7 +8,7 @@ import CircleSpinner from "./CircleSpinner/CircleSpinner";
 import { Link } from "react-router-dom";
 
 export default function ArticleCart({ data }) {
-  console.log(data);
+
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
   const items = 14000;
