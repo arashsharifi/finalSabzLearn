@@ -1,0 +1,16 @@
+.vertical-mouse-control .swiper {
+  margin-top: 15px;
+  width: 80%;
+  height: 300px;
+ 
+}
+
+.vertical-mouse-control .swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff  !important;
+}
+

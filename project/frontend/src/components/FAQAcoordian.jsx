@@ -44,7 +44,7 @@ export default function FAQAcoordian({ sessions }) {
     return () => clearTimeout(timer); // پاکسازی تایمر در زمان unmount
   }, [isUserInfosEmpty, sessions]);
 
-  console.log(authContext.userInfos);
+
   return (
     <div className="p-4 bg-gray-200 rounded-lg w-full flex flex-col gap-2 bg-grey">
       {isUserInfosEmpty ? (

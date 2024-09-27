@@ -3,13 +3,14 @@ import TopBr from "../components/TopBr";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import ActiveSwiperEfect from "../components/ActiveSwiperEfect/ActiveSwiperEfect";
-
+import VerticalMouseControl from "../components/VerticalMouseControl/VerticalMouseControl";
 import { HiAdjustments } from "react-icons/hi";
 import { CiSearch } from "react-icons/ci";
 
 import { useParams } from "react-router-dom";
 import AuthContext from "../context/authContext";
-
+import { TbAxisX } from "react-icons/tb";
+import { TbAxisY } from "react-icons/tb";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,6 +22,17 @@ export default function Category() {
   const [filteredData, setFilteredData] = useState([]); // داده‌های فیلتر شده
   const [status, setStatus] = useState("default"); // استیت برای وضعیت فیلتر
   const { categoryName } = useParams();
+
+  const [mode, setMode] = useState({
+    selected: "x",
+  });
+
+  const handleToggle = (axis) => {
+    setMode((prevState) => ({
+      ...prevState,
+      selected: axis,
+    }));
+  };
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -46,12 +58,13 @@ export default function Category() {
   }, [categoryName, isUserInfosEmpty]);
 
   const handleSearch = (data) => {
- 
     const filtered = categoryDatas.filter(
       (item) => item.name.toLowerCase().includes(data.toLowerCase()) // فرض بر این است که هر آیتم یک property به نام name دارد
     );
     setFilteredData(filtered);
   };
+
+  // console.log(filteredData,"filteredData")
 
   useEffect(() => {
     let filtered = [...categoryDatas];
@@ -86,11 +99,21 @@ export default function Category() {
       <div className="flex  flex-col-reverse gap-6 md:gap-0 md:flex-row w-[90%] bg-grey mx-auto justify-between items-center rtl p-3 rounded-lg shadow-xl">
         <div className="flex w-[100%] md:w-[50%]  items-center gap-3">
           <div className="flex gap-1">
-            <span className="bg-customfive p-2 rounded-lg cursor-pointer">
-              <HiAdjustments className="text-myWhite" />
+            <span
+              className={`p-2 rounded-lg cursor-pointer transition duration-300 ${
+                mode.selected === "x" ? "bg-customfive" : "bg-greydarko"
+              }`}
+              onClick={() => handleToggle("x")}
+            >
+              <TbAxisX className="text-myWhite" />
             </span>
-            <span className="bg-greydarko p-2 rounded-lg cursor-pointer">
-              <HiAdjustments className="text-myWhite" />
+            <span
+              className={`p-2 rounded-lg cursor-pointer transition duration-300 ${
+                mode.selected === "y" ? "bg-customfive" : "bg-greydarko"
+              }`}
+              onClick={() => handleToggle("y")}
+            >
+              <TbAxisY className="text-myWhite" />
             </span>
           </div>
           <div className="w-[80%] md:w-[60%] h-50px">
@@ -148,8 +171,11 @@ export default function Category() {
           <p className="text-center text-customeeleven border border-customeeleven rounded-md mt-10 mx-auto w-[90%] font-bold text-xl p-3">
             فعلا هیچ دوره ای نداریم
           </p>
-        ) : (
+        ) : mode.selected === "x" ? ( // اگر محور x بود
           <ActiveSwiperEfect dataSwiper={filteredData} />
+        ) : (
+       
+          <VerticalMouseControl dataSwiper={filteredData} />
         )}
       </div>
       <Footer />

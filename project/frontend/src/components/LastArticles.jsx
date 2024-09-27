@@ -24,7 +24,7 @@ export default function LastArticles() {
           },
         });
         const result = await response.json();
-        console.log(result);
+       
         if (result) {
           setDataArticle(result);
         }
@@ -35,7 +35,7 @@ export default function LastArticles() {
 
     fetchArticleData();
   }, []);
-  console.log("dataArticle", dataArticle);
+
   const limitedArticles = dataArticle.slice(0, 3);
   return (
     <div className="flex flex-col rtl">

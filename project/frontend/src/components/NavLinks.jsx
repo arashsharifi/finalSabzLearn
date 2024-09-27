@@ -60,7 +60,7 @@ export default function NavLinks() {
     return <div>No data available</div>;
   }
 
-  console.log(menuData);
+
 
   const linksNavDataaaa = menuData.map((item, index) => ({
     id: item._id,

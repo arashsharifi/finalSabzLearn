@@ -19,7 +19,7 @@ import CircleSpinner from "../CircleSpinner/CircleSpinner";
 export default function ActiveSwiper({ dataSwiper }) {
   const rate = 3;
   const countStudent = 200;
-  // console.log(dataSwiper);
+
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
   const getHrefPath = (href) => {

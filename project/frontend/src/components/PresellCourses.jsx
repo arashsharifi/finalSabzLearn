@@ -19,7 +19,7 @@ export default function PresellCourses() {
           }
         );
         const result = await response.json();
-        console.log(result);
+  
         if (result) {
                 setPresellData(result)
         }

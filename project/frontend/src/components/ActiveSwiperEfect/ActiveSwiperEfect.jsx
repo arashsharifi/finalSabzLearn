@@ -16,7 +16,7 @@ import { EffectCoverflow, Pagination } from "swiper/modules";
 export default function ActiveSwiperEfect({ dataSwiper }) {
   const score = 3;
   const countStudent = 300;
-  console.log(dataSwiper);
+
   const [isLoaderShow, setIsLoaderShow] = useState(false);
   const inImageLoaded = () => setIsLoaderShow(true);
   const getHrefPath = (href) => {
@@ -43,11 +43,11 @@ export default function ActiveSwiperEfect({ dataSwiper }) {
         }}
         pagination={true}
         modules={[EffectCoverflow, Pagination]}
-        className="mySwiper"
+        className="mySwiper active-swiper" // اضافه کردن کلاس خاص
       >
         {dataSwiper.map((item) => (
-          <SwiperSlide>
-            <img src={item.cover} onLoad={inImageLoaded} />
+          <SwiperSlide key={item.id}>
+            <img src={item.cover} onLoad={inImageLoaded} alt={item.name} />
             {!isLoaderShow && <CircleSpinner />}
             <div className="flex flex-col bg-grey gap-2 w-full h-full rtl p-3">
               <h1 className="self-start text-md font-bold">{item.name}</h1>
@@ -68,7 +68,7 @@ export default function ActiveSwiperEfect({ dataSwiper }) {
                 <p>{item.price.toLocaleString("fa-IR")}</p>
               </div>
               <Link to={getHrefPath(item.shortName)}>
-                <button className="bg-gradient-to-r w-[100%] md:w-[100%]   from-customfour to-customseven px-1 py-1 rounded-lg text-sm flex justify-center md:justify-between gap-2 items-center duration-300 hover:text-myWhite self-center md:self-end ">
+                <button className="bg-gradient-to-r w-[100%] md:w-[100%] from-customfour to-customseven px-1 py-1 rounded-lg text-sm flex justify-center md:justify-between gap-2 items-center duration-300 hover:text-myWhite self-center md:self-end ">
                   مشاهده بیشتر
                   <FaArrowLeftLong />
                 </button>
