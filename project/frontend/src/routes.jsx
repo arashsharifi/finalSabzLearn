@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import TestReduser from "./TestReduser/TestReduser";
 import AllArticle from "./pages/AllArticle/AllArticle";
+import Contact from "./pages/Contact";
 const routes = [
   { path: "/", element: <Index /> },
   { path: "/course-info/:courseName", element: <CourseInfo /> },
@@ -17,6 +18,7 @@ const routes = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/test", element: <TestReduser /> },
+  { path: "/contact", element: <Contact /> },
 ];
 
 export default routes;

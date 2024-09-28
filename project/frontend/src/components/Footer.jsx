@@ -1,5 +1,6 @@
 import React from "react";
 import { AiFillSlackCircle } from "react-icons/ai";
+import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <div className="flex flex-col justify-between gap-10  rtl   mt-10 p-5">
@@ -39,7 +40,13 @@ export default function Footer() {
             <p className="duration-300 hover:text-customfive my-3 cursor-pointer">
               <a href="#">آموزش پکیج nodejs</a>
             </p>
-            <p className="duration-300 hover:text-customfive my-3 cursor-pointer">
+
+            <Link to='/contact'>
+              <p className="duration-300 hover:text-customfive my-3 cursor-pointer text-xl italic font-bold">
+                ارتباط با ما
+              </p>
+            </Link>
+            <p className="duration-300 hover:text-customfive my-3 cursor-pointer ">
               <a href="#">آموزش پکیج php</a>
             </p>
             <p className="duration-300 hover:text-customfive my-3 cursor-pointer">
