@@ -3,6 +3,7 @@ import { FaLockOpen } from "react-icons/fa6";
 import { IoMdPerson } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { RxFontFamily } from "react-icons/rx";
+import { FaPhoneAlt } from "react-icons/fa";
 import validator from "../../validators/validator";
 
 const inpuTexReducer = (state, action) => {
@@ -66,7 +67,7 @@ export default function InputTextArea(props) {
         ) : (
           <MdEmail className="text-3xl text-greydark" />
         )} */}
-        {props.icons === "person" ? (
+        {props.icons === "noIcon" ? null : props.icons === "person" ? (
           <IoMdPerson className="text-3xl text-greydark" />
         ) : props.icons === "lock" ? (
           <FaLockOpen className="text-3xl text-greydark" />
@@ -74,6 +75,8 @@ export default function InputTextArea(props) {
           <MdEmail className="text-3xl text-greydark" />
         ) : props.icons === "family" ? (
           <RxFontFamily className="text-3xl text-greydark" />
+        ) : props.icons === "phone" ? (
+          <FaPhoneAlt className="text-3xl text-greydark" />
         ) : null}
       </div>
     ) : (
@@ -90,13 +93,17 @@ export default function InputTextArea(props) {
           onChange={onchangeHanderMy}
           required
         ></textarea>
-        {props.icons === "person" ? (
+        {props.icons === "noIcon" ? null : props.icons === "person" ? (
           <IoMdPerson className="text-3xl text-greydark" />
         ) : props.icons === "lock" ? (
           <FaLockOpen className="text-3xl text-greydark" />
-        ) : (
+        ) : props.icons === "email" ? (
           <MdEmail className="text-3xl text-greydark" />
-        )}
+        ) : props.icons === "family" ? (
+          <RxFontFamily className="text-3xl text-greydark" />
+        ) : props.icons === "phone" ? (
+          <FaPhoneAlt className="text-3xl text-greydark" />
+        ) : null}
       </div>
     );
   return <div className="w-full ">{element}</div>;
