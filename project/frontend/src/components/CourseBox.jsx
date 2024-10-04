@@ -28,7 +28,7 @@ export default function CourseBox({ courseData }) {
   return (
     <div
       key={courseData?._id}
-      className="bg-myWhite w-full  md:w-[85%] flex flex-col gap-2 p-4 rounded-lg duration-300 hover:shadow-custom"
+      className="bg-myWhite w-full  md:w-[85%] flex flex-col gap-2 p-4 rounded-lg duration-300 shadow-custom hover:shadow-none border "
     >
       <div className="w-[98%]  mx-auto rounded-lg z-20">
         <img
@@ -55,7 +55,7 @@ export default function CourseBox({ courseData }) {
 
         <div className="w-full  mx-auto flex justify-between">
           <div className="flex  gap-2 w-full  items-center p-3">
-            <p> {courseData?.creator} </p>
+          <p className="truncate  max-w-[150px] md:max-w-[120px] lg:max-w-[100px]">{courseData?.creator}</p>
             <GiTeacher />
           </div>
           <div className="mt-4">
