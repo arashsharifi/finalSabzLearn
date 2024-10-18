@@ -12,6 +12,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { Outlet } from "react-router-dom";
 import logo from "../../../public/images/logo/22.png";
 import { Link } from "react-router-dom";
+import TobarAdmin from "./TobarAdmin";
 const Menus = [
   { id: 1, title: "users", icon: <MdDashboard />, link: "/p-admin/users" },
   { id: 2, title: "courses", icon: <CiUser />, gap: true, link: "/p-admin/courses" },
@@ -76,6 +77,7 @@ export default function IndexAdmin() {
             به داشبرد ادمین خوش آمدید
           </p>
         </div>
+
         <div className="flex p-2">
           <ul className="flex flex-col gap-2 ml-4  w-full">
             {Menus.map((menu) => (
@@ -103,6 +105,7 @@ export default function IndexAdmin() {
         </div>
       </div>
       <div className="flex flex-col w-full overflow-hidden h-[100vh] overflow-scroll  ">
+        <TobarAdmin/>
         <Outlet />
       </div>
     </div>
