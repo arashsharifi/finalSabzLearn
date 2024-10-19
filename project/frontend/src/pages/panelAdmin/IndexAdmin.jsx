@@ -1,29 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { MdDashboard } from "react-icons/md";
-import { CiChat1 } from "react-icons/ci";
+import React, { useContext, useEffect, useState } from "react";
+;
 import { CiUser } from "react-icons/ci";
-import { SlCalender } from "react-icons/sl";
-import { CiSearch } from "react-icons/ci";
-import { IoMdAnalytics } from "react-icons/io";
-import { FaFileSignature } from "react-icons/fa";
+
+import { FaHome } from "react-icons/fa";
+import { MdOutlineCastForEducation } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-
-import { Outlet } from "react-router-dom";
-import logo from "../../../public/images/logo/22.png";
+import { ImExit } from "react-icons/im";
+import { RiDiscountPercentLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import TobarAdmin from "./TobarAdmin";
-const Menus = [
-  { id: 1, title: "users", icon: <MdDashboard />, link: "/p-admin/users" },
-  { id: 2, title: "courses", icon: <CiUser />, gap: true, link: "/p-admin/courses" },
-  { id: 3, title: "Articles", icon: <CiChat1 />, link: "/p-admin/articles" },
-  { id: 4, title: "menus", icon: <SlCalender />, link: "/p-admin/menus" },
-  { id: 5, title: "setting", icon: <IoMdAnalytics />, link: "" },
-];
-
+import { GrArticle } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import logo from "../../../public/images/logo/22.png";
+import swal from "sweetalert";
+import AuthContext from "../../context/authContext";
 export default function IndexAdmin() {
   const [open, setOpen] = useState(false);
-
+  const authContext=useContext(AuthContext)
+  const navigate = useNavigate();
+  const handleExitClick = () => {
+    swal({
+      title: "آیا مطمئن هستید؟",
+      text: "می‌خواهید خارج شوید؟",
+      icon: "warning",
+      buttons: 'اوکی',
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        authContext.logout()
+        navigate('/')
+        swal("شما خارج شدید!", {
+          icon: "success",
+        });
+      }
+    });
+  };
+  const Menus = [
+    { id: 1, title: "صفحه اصلی", icon: <FaHome />, link: "/p-admin/users" },
+    {
+      id: 2,
+      title: "دوره ها ",
+      icon: <MdOutlineCastForEducation />,
+      gap: true,
+      link: "/p-admin/courses",
+    },
+    {
+      id: 3,
+      title: "مقاله ها ",
+      icon: <GrArticle />,
+      link: "/p-admin/articles",
+    },
+    { id: 4, title: "کاربران", icon: <CiUser />, link: "/p-admin/menus" },
+    {
+      id: 5,
+      title: "کد های تخفیف ",
+      icon: <RiDiscountPercentLine />,
+      link: "",
+      onClick: () => console.log("yoo"),
+    },
+    {
+      id: 6,
+      title: "خروج",
+      icon: <ImExit />,
+      link: "",
+      onClick: handleExitClick,
+    },
+  ];
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 970) {
@@ -87,15 +131,14 @@ export default function IndexAdmin() {
                     menu.gap ? "mt-9" : "mt-2"
                   }`}
                   to={menu.link}
+                  onClick={menu.onClick} // اضافه کردن onClick به Link
                 >
                   <div className={`${open ? "text-3xl" : "text-xl"}`}>
-                    {" "}
                     {menu.icon}
                   </div>
                   <span
                     className={`${open && "hidden "} origin-left duration-200`}
                   >
-                    {" "}
                     {menu.title}
                   </span>
                 </Link>
@@ -105,7 +148,7 @@ export default function IndexAdmin() {
         </div>
       </div>
       <div className="flex flex-col w-full overflow-hidden h-[100vh] overflow-scroll  ">
-        <TobarAdmin/>
+        <TobarAdmin />
         <Outlet />
       </div>
     </div>

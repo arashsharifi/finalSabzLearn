@@ -18,23 +18,34 @@ import AuthContext from "../context/authContext";
 export default function NavBar() {
   const [open, setOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const localStorageData = JSON.parse(localStorage.getItem("user"));
-  const toggleContent = () => {
-    setShowContent(!showContent);
+  const userExists = localStorage.getItem("user");
+  // const toggleContent = () => {
+  //   setShowContent(!showContent);
+  // };
+
+  const handleMouseEnter = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsModalOpen(false);
   };
 
   const deletLocalStorage = () => {
-    localStorage.removeItem("user");
-    window.location.reload();
+    // localStorage.removeItem("user");
+    // window.location.reload();
+    authContext.logout()
   };
+
 
   return (
     <nav className="bg-myWhite z-50">
       <div className="flex items-center font-medium justify-between">
         <div className="hidden md:flex gap-2 ml-4 ">
-          {authContext.userInfos.name ? (
+          {/* {authContext.userInfos.name ? (
             <div className="relative">
               <button
                 className="bg-myWhite border-2 text-black border-customfive rounded-md font-iransans p-3 hover:bg-customfive hover:text-myWhite transition-all duration-500 flex gap-1 items-center text-customfive whitespace-nowrap"
@@ -70,6 +81,46 @@ export default function NavBar() {
                   </div>
                 </div>
               )}
+            </div>
+          ) : (
+            <Botton>
+              <Link to="/register">ثبت نام / ورود</Link>
+            </Botton>
+          )} */}
+       {authContext.userInfos?.name || userExists ? ( // اگر کاربر در authContext یا local storage وجود دارد
+            <div className="relative">
+              <button
+                className="bg-myWhite border-2 text-black border-customfive rounded-md font-iransans p-3 hover:bg-customfive hover:text-myWhite transition-all duration-500 flex gap-1 items-center text-customfive whitespace-nowrap"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {authContext.userInfos.name || "کاربر"}
+              </button>
+              {/* مودال کاربر */}
+              <div
+                className={`absolute z-10 bg-myWhite shadow-lg rounded-md mt-2 p-3 w-64 transition-all duration-300 ease-in-out transform origin-top ${
+                  isModalOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"
+                }`}
+                onMouseEnter={handleMouseEnter} // مودال باز بمونه وقتی موس واردش میشه
+                onMouseLeave={handleMouseLeave} // بسته بشه وقتی موس خارج بشه
+              >
+                <button className="absolute top-2 left-2" onClick={() => setIsModalOpen(false)}>
+                  <GoX />
+                </button>
+
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex gap-1 items-center">
+                    <p className="text-sm"> نام کاربری:</p>{" "}
+                    <p>{authContext?.userInfos?.username || "فلانی"}</p>
+                  </div>
+                  <button
+                    onClick={deletLocalStorage}
+                    className="bg-custometen text-black p-1 rounded-md duration-200 hover:bg-customeeleven"
+                  >
+                    خروج اکانت
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <Botton>
@@ -147,7 +198,7 @@ export default function NavBar() {
                 <p className="text-sm"> ArashSharfi1970@gmail.com</p>
               )}
             </div>
-            {localStorageData !== null ? (
+            {/* {localStorageData !== null ? (
               <div className="w-full">
                 <button
                   onClick={deletLocalStorage}
@@ -159,7 +210,7 @@ export default function NavBar() {
               </div>
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </ul>
       </div>
