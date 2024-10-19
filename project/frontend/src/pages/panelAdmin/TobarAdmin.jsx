@@ -6,6 +6,7 @@ import AuthContext from "../../context/authContext";
 export default function TobarAdmin() {
   const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -38,8 +39,8 @@ export default function TobarAdmin() {
     setIsModalOpen(false);
   };
 
-  console.log("authContext", authContext);
-  console.log("data", data);
+  // console.log("authContext", authContext);
+  // console.log("data", data);
 
   return (
     <div className="flex justify-between p-3 px-8 font-iransans rtl">

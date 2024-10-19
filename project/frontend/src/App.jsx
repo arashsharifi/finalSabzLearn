@@ -39,8 +39,10 @@ export default function App() {
           SetIsLoggedIn(true);
           setUserInfos(result);
         });
+    } else {
+      SetIsLoggedIn(false);
     }
-  }, [token]);
+  }, [token, logout, login]);
 
   // console.log("userInfos", userInfos);
   return (
