@@ -1,11 +1,16 @@
 // MaterialTable component
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Card, Typography, IconButton } from "@material-tailwind/react";
-
-export default function MaterialTable({ tableHead, tableBody }) {
+import swal from "sweetalert";
+export default function MaterialTable({ tableHead, tableBody, handleDeleteClick }) {
+  console.log("tableBody", tableBody);
+ 
   return (
     <Card className="h-full w-[95%] mx-auto p-2 shadow-xl overflow-y-scroll no-sc">
-      <div className="overflow-y-scroll scrollbar-none" style={{ maxHeight: '400px' }}>
+      <div
+        className="overflow-y-scroll scrollbar-none"
+        style={{ maxHeight: "400px" }}
+      >
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
@@ -26,7 +31,7 @@ export default function MaterialTable({ tableHead, tableBody }) {
             </tr>
           </thead>
           <tbody>
-            {tableBody.map(({ name, email, username }, index) => (
+            {tableBody.map(({ name, email, username, id }, index) => (
               <tr key={index} className="even:bg-blue-gray-50/50 font-iransans">
                 <td className="p-4 w-[20%] bg-customfour">
                   <Typography
@@ -68,6 +73,7 @@ export default function MaterialTable({ tableHead, tableBody }) {
                       className="duration-200 bg-error shadow-none hover:shadow-lg flex items-center justify-center"
                       variant="text"
                       color="blue-gray"
+                      onClick={() => handleDeleteClick(id)}
                     >
                       <TrashIcon className="h-4 w-4 text-myWhite" />
                     </IconButton>
