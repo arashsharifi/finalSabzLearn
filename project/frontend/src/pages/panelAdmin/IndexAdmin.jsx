@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-;
 import { CiUser } from "react-icons/ci";
 
 import { FaHome } from "react-icons/fa";
@@ -8,6 +7,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { ImExit } from "react-icons/im";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import { BiSolidCategory } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import TobarAdmin from "./TobarAdmin";
 import { GrArticle } from "react-icons/gr";
@@ -18,19 +18,20 @@ import swal from "sweetalert";
 import AuthContext from "../../context/authContext";
 export default function IndexAdmin() {
   const [open, setOpen] = useState(false);
-  const authContext=useContext(AuthContext)
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  
   const handleExitClick = () => {
     swal({
       title: "آیا مطمئن هستید؟",
       text: "می‌خواهید خارج شوید؟",
       icon: "warning",
-      buttons: 'اوکی',
+      buttons: "اوکی",
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        authContext.logout()
-        navigate('/')
+        authContext.logout();
+        navigate("/");
         swal("شما خارج شدید!", {
           icon: "success",
         });
@@ -52,7 +53,7 @@ export default function IndexAdmin() {
       icon: <GrArticle />,
       link: "/p-admin/articles",
     },
-    { id: 4, title: "کاربران", icon: <CiUser />, link: "/p-admin/menus" },
+    { id: 4, title: "کاربران", icon: <CiUser />, link: "/p-admin/users" },
     {
       id: 5,
       title: "کد های تخفیف ",
@@ -62,6 +63,13 @@ export default function IndexAdmin() {
     },
     {
       id: 6,
+      title: "دسته بندی ها",
+      icon: <BiSolidCategory />,
+      link: "",
+      onClick: () => console.log("yoo"),
+    },
+    {
+      id: 7,
       title: "خروج",
       icon: <ImExit />,
       link: "",
