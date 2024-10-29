@@ -32,6 +32,8 @@ export default function NavBar() {
 
   const handleMouseLeave = () => {
     setIsModalOpen(false);
+
+    
   };
 
   const deletLocalStorage = () => {

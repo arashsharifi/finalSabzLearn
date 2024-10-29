@@ -8,7 +8,7 @@ export default function TobarAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [data, setData] = useState(null);
-
+  console.log('authContext?.userInfos',authContext?.userInfos)
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
     if (localStorageData) {
