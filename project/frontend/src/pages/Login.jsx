@@ -131,6 +131,8 @@ export default function Login() {
 
       if (response.ok) {
         const result = await response.json();
+        // console.log(result)
+        // return''
 
         authContext.login({}, result.accessToken);
         toast.success(
