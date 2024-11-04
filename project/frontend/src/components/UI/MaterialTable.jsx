@@ -2,9 +2,14 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Card, Typography, IconButton } from "@material-tailwind/react";
 import swal from "sweetalert";
-export default function MaterialTable({ tableHead, tableBody, handleDeleteClick }) {
+export default function MaterialTable({
+  tableHead,
+  tableBody,
+  handleDeleteClick,
+  handlerBanUser,
+}) {
   console.log("tableBody", tableBody);
- 
+
   return (
     <Card className="h-full w-[95%] mx-auto p-2 shadow-xl overflow-y-scroll no-sc">
       <div
@@ -31,7 +36,7 @@ export default function MaterialTable({ tableHead, tableBody, handleDeleteClick 
             </tr>
           </thead>
           <tbody>
-            {tableBody.map(({ name, email, username, id }, index) => (
+            {tableBody.map(({ name, email, username, id, phone }, index) => (
               <tr key={index} className="even:bg-blue-gray-50/50 font-iransans">
                 <td className="p-4 w-[20%] bg-customfour">
                   <Typography
@@ -39,7 +44,7 @@ export default function MaterialTable({ tableHead, tableBody, handleDeleteClick 
                     color="blue-gray"
                     className="font-normal font-iransans "
                   >
-                    {name}
+                    {name || "نام کاربر نامشخص"}
                   </Typography>
                 </td>
                 <td className="p-4 w-[20%] bg-customThree">
@@ -48,7 +53,7 @@ export default function MaterialTable({ tableHead, tableBody, handleDeleteClick 
                     color="blue-gray"
                     className="font-normal font-iransans"
                   >
-                    {email}
+                    {email || "ایمیل نامشخص"}
                   </Typography>
                 </td>
                 <td className="p-4 w-[20%] bg-customThree">
@@ -57,7 +62,16 @@ export default function MaterialTable({ tableHead, tableBody, handleDeleteClick 
                     color="blue-gray"
                     className="font-normal font-iransans"
                   >
-                    {username}
+                    {username || "شناسه کاربری نامشخص"}
+                  </Typography>
+                </td>
+                <td className="p-4 w-[20%] bg-customThree">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal font-iransans"
+                  >
+                    {phone || "شماره نامشخص"}
                   </Typography>
                 </td>
                 <td className="p-4 w-[15%]">
@@ -85,6 +99,7 @@ export default function MaterialTable({ tableHead, tableBody, handleDeleteClick 
                       <Typography
                         variant="small"
                         color="blue-gray"
+                        onClick={() => handlerBanUser(id)}
                         className="font-normal font-iransans text-myWhite"
                       >
                         بن
