@@ -71,7 +71,7 @@ export default function Register() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log(result);
+        console.log("result",result);
         authContext.login(result.user, result.accessToken);
         toast.success(`${result.user.name} 🎈✨ خوش آمدی `, {
           position: "top-center",

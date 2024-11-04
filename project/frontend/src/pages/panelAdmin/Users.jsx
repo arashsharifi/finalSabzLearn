@@ -28,7 +28,6 @@ export default function Users() {
         setUsers(filteredUsers);
       });
   }
-  
 
   const handleDeleteClick = async (userId) => {
     // نمایش پنجره تایید با استفاده از SweetAlert و دریافت نتیجه با await
@@ -55,7 +54,7 @@ export default function Users() {
             },
           }
         );
-        getAllUsers()
+        getAllUsers();
         if (!response.ok) throw new Error("خطا در حذف کاربر");
         await swal("شما کاربر را حذف کردید", {
           icon: "success",
@@ -68,6 +67,93 @@ export default function Users() {
       }
     } else {
       // پیام لغو عملیات
+      await swal("عملیات لغو شد", {
+        icon: "info",
+      });
+    }
+  };
+
+  // const handlerBanUser = async (userId) => {
+  //   const result = await swal({
+  //     title: "آیا مطمئن به بن کاربر هستید",
+  //     text: "کاربر را با آره بن کنید",
+  //     icon: "warning",
+  //     buttons: {
+  //       cancel: "نه",
+  //       confirm: "آره",
+  //     },
+  //     dangerMode: true,
+  //   });
+
+  //   if (result) {
+  //     console.log("yesss");
+  //     try {
+  //       const localStorageData = JSON.parse(localStorage.getItem("user"));
+  //       const response = await fetch(
+  //         `http://localhost:4000/v1/users/ban/${userId}`,
+  //         {
+  //           method: "PUT",
+  //           headers: {
+  //             Authorization: `Bearer ${localStorageData.token}`,
+  //           },
+  //         }
+  //       );
+  //       getAllUsers();
+  //       if (!response.ok) throw new Error("خطا در بن کاربر");
+  //       await swal("شما کاربر را بن کردید", {
+  //         icon: "success",
+  //       });
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //       await swal("خطایی رخ داد، کاربر بن نشد", {
+  //         icon: "error",
+  //       });
+  //     }
+  //   } else {
+  //     console.log("nooo");
+  //     await swal("عملیات لغو شد", {
+  //       icon: "info",
+  //     });
+  //   }
+  // };
+  const handlerBanUser = async (userId) => {
+    const result = await swal({
+      title: "آیا مطمئن به بن کاربر هستید",
+      text: "کاربر را با آره بن کنید",
+      icon: "warning",
+      buttons: {
+        cancel: "نه",
+        confirm: "آره",
+      },
+      dangerMode: true,
+    });
+  
+    if (result) {
+      console.log("yesss");
+      try {
+        const localStorageData = JSON.parse(localStorage.getItem("user"));
+        const response = await fetch(
+          `http://localhost:4000/v1/users/ban/${userId}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${localStorageData.token}`,
+            },
+          }
+        );
+        getAllUsers()
+        if (!response.ok) throw new Error("خطا در بن کاربر");
+        await swal("شما کاربر را بن کردید", {
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        await swal("خطایی رخ داد، کاربر بن نشد", {
+          icon: "error",
+        });
+      }
+    } else {
+      console.log("nooo");
       await swal("عملیات لغو شد", {
         icon: "info",
       });
@@ -91,13 +177,20 @@ export default function Users() {
               name: user?.name,
               email: user?.email,
               username: user?.username,
+              phone: user?.phone,
             }));
           setUsers(filteredUsers);
         });
     }
   }, [token]);
 
-  const tableHead = ["نام و نام خانوادگی", "ایمیل", "شناسه کاربری", "عملیات"];
+  const tableHead = [
+    "نام و نام خانوادگی",
+    "ایمیل",
+    "شناسه کاربری",
+    "شماره ",
+    "عملیات",
+  ];
 
   return (
     <div className="flex flex-col gap-1 rtl font-iransans">
@@ -108,6 +201,7 @@ export default function Users() {
         tableHead={tableHead}
         tableBody={users}
         handleDeleteClick={handleDeleteClick}
+        handlerBanUser={handlerBanUser}
       />
     </div>
   );
