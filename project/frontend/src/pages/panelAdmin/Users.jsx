@@ -1,10 +1,11 @@
 // Users component
 import React, { useEffect, useState } from "react";
 import MaterialTable from "../../components/UI/MaterialTable";
-
+import swal from "sweetalert";
 export default function Users() {
   const [token, setToken] = useState(false);
   const [users, setUsers] = useState([]);
+  const [bannedUsers, setBannedUsers] = useState([]);
   // const [removeId,setRemoveId]=useState(null)
 
   function getAllUsers() {
@@ -73,50 +74,9 @@ export default function Users() {
     }
   };
 
-  // const handlerBanUser = async (userId) => {
-  //   const result = await swal({
-  //     title: "آیا مطمئن به بن کاربر هستید",
-  //     text: "کاربر را با آره بن کنید",
-  //     icon: "warning",
-  //     buttons: {
-  //       cancel: "نه",
-  //       confirm: "آره",
-  //     },
-  //     dangerMode: true,
-  //   });
-
-  //   if (result) {
-  //     console.log("yesss");
-  //     try {
-  //       const localStorageData = JSON.parse(localStorage.getItem("user"));
-  //       const response = await fetch(
-  //         `http://localhost:4000/v1/users/ban/${userId}`,
-  //         {
-  //           method: "PUT",
-  //           headers: {
-  //             Authorization: `Bearer ${localStorageData.token}`,
-  //           },
-  //         }
-  //       );
-  //       getAllUsers();
-  //       if (!response.ok) throw new Error("خطا در بن کاربر");
-  //       await swal("شما کاربر را بن کردید", {
-  //         icon: "success",
-  //       });
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //       await swal("خطایی رخ داد، کاربر بن نشد", {
-  //         icon: "error",
-  //       });
-  //     }
-  //   } else {
-  //     console.log("nooo");
-  //     await swal("عملیات لغو شد", {
-  //       icon: "info",
-  //     });
-  //   }
-  // };
   const handlerBanUser = async (userId) => {
+    console.log("yyy");
+
     const result = await swal({
       title: "آیا مطمئن به بن کاربر هستید",
       text: "کاربر را با آره بن کنید",
@@ -127,7 +87,7 @@ export default function Users() {
       },
       dangerMode: true,
     });
-  
+
     if (result) {
       console.log("yesss");
       try {
@@ -141,8 +101,10 @@ export default function Users() {
             },
           }
         );
-        getAllUsers()
         if (!response.ok) throw new Error("خطا در بن کاربر");
+        const updatedBannedUsers = [...bannedUsers, userId];
+        setBannedUsers(updatedBannedUsers);
+        localStorage.setItem("bannedUsers", JSON.stringify(updatedBannedUsers));
         await swal("شما کاربر را بن کردید", {
           icon: "success",
         });
@@ -184,6 +146,12 @@ export default function Users() {
     }
   }, [token]);
 
+  useEffect(() => {
+    const storedBannedUsers =
+      JSON.parse(localStorage.getItem("bannedUsers")) || [];
+    setBannedUsers(storedBannedUsers);
+  }, []);
+
   const tableHead = [
     "نام و نام خانوادگی",
     "ایمیل",
@@ -202,6 +170,7 @@ export default function Users() {
         tableBody={users}
         handleDeleteClick={handleDeleteClick}
         handlerBanUser={handlerBanUser}
+        bannedUsers={bannedUsers}
       />
     </div>
   );

@@ -7,6 +7,7 @@ export default function MaterialTable({
   tableBody,
   handleDeleteClick,
   handlerBanUser,
+  bannedUsers,
 }) {
   console.log("tableBody", tableBody);
 
@@ -92,17 +93,24 @@ export default function MaterialTable({
                       <TrashIcon className="h-4 w-4 text-myWhite" />
                     </IconButton>
                     <IconButton
-                      className="duration-200 bg-error shadow-none hover:shadow-lg flex items-center justify-center"
+                      className={`duration-200 shadow-none flex items-center justify-center h-10 w-14 ${
+                        bannedUsers.includes(id)
+                          ? "bg-greydarko cursor-not-allowed"
+                          : "bg-error hover:shadow-lg"
+                      }`}
                       variant="text"
                       color="blue-gray"
+                      disabled={bannedUsers.includes(id)}
+                      onClick={() =>
+                        !bannedUsers.includes(id) && handlerBanUser(id)
+                      }
                     >
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        onClick={() => handlerBanUser(id)}
                         className="font-normal font-iransans text-myWhite"
                       >
-                        بن
+                        {bannedUsers.includes(id) ? "بن شده" : "بن"}
                       </Typography>
                     </IconButton>
                   </div>

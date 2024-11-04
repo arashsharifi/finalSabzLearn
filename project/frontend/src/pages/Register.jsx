@@ -57,7 +57,6 @@ export default function Register() {
       password: formState.inputs.password.value,
       confirmPassword: formState.inputs.password.value,
       phone: formState.inputs.phoneNumber.value,
-
     };
 
     try {
@@ -71,7 +70,6 @@ export default function Register() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("result",result);
         authContext.login(result.user, result.accessToken);
         toast.success(`${result.user.name} 🎈✨ خوش آمدی `, {
           position: "top-center",
@@ -90,17 +88,32 @@ export default function Register() {
         }, 3000);
       } else {
         const errorData = await response.json();
+        console.log("errorData", errorData.message);
         console.error(errorData);
-        toast.error(`${errorData.message[0].message}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+
+        if (errorData.message === "this phone number banned!") {
+          toast.error("شما بند شده‌اید و دسترسی به ورود ندارید", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(`${errorData.message[0].message}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       }
     } catch (error) {
       console.error(error);
