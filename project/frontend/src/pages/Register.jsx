@@ -40,6 +40,10 @@ export default function Register() {
         value: "",
         isValid: false,
       },
+      phoneNumber: {
+        value: "",
+        isValid: false,
+      },
     },
     false
   );
@@ -52,6 +56,8 @@ export default function Register() {
       email: formState.inputs.email.value,
       password: formState.inputs.password.value,
       confirmPassword: formState.inputs.password.value,
+      phone: formState.inputs.phoneNumber.value,
+
     };
 
     try {
@@ -152,6 +158,20 @@ export default function Register() {
                     maxValidator(20),
                   ]}
                   placeholder="نام کاربری"
+                  onInputsHandler={onInputsHandler}
+                />
+                <InputTextArea
+                  id="phoneNumber"
+                  className="flex items-center gap-2 w-[95%] mx-auto p-2 border bg-myWhite  rounded-md shadow-md shadow-greydark"
+                  element="input"
+                  type="text"
+                  icons="phone"
+                  validations={[
+                    requiredValidator(),
+                    minValidator(10),
+                    maxValidator(12),
+                  ]}
+                  placeholder=" شماره تماس"
                   onInputsHandler={onInputsHandler}
                 />
 
