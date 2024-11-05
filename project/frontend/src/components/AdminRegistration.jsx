@@ -8,7 +8,8 @@ import {
 import AuthContext from "../context/authContext";
 import InputTextArea from "./UI/InputTextArea";
 import { useForm } from "../hooks/useForm";
-import { toast } from "react-toastify"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminRegistration({onUserAdded }) {
   const [gender, setGender] = useState("");
@@ -79,7 +80,7 @@ export default function AdminRegistration({onUserAdded }) {
         });
       } else {
         const errorData = await response.json();
-        console.log("errorData", errorData.message);
+        // console.log("errorData", errorData.message);
         console.error(errorData);
 
         if (errorData.message === "this phone number banned!") {
@@ -111,7 +112,6 @@ export default function AdminRegistration({onUserAdded }) {
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center p-2 rounded-sm shadow-xl m-4 font-iransans max-w-[100%] md:max-w-[70%] border border-grey">
-      <p className="text-xl font-bold italic self-start">ثبت نام کاربران</p>
       <div className="flex w-full">
         <form action="#" className="w-full flex flex-col gap-4 mt-5">
           <div className="flex flex-col md:flex-row gap-2">
@@ -190,7 +190,7 @@ export default function AdminRegistration({onUserAdded }) {
               onInputsHandler={onInputsHandler}
             />
           </div>
-          <div className="flex w-full justify-end p-2 bg-customThree">
+          <div className="flex w-full justify-end p-2 ">
             <button
               type="submit"
               onClick={registaerAdmimSubmitHandler}
@@ -206,6 +206,7 @@ export default function AdminRegistration({onUserAdded }) {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 }

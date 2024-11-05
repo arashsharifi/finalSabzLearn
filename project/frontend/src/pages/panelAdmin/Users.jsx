@@ -1,5 +1,6 @@
 // Users component
 import React, { useEffect, useState } from "react";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import MaterialTable from "../../components/UI/MaterialTable";
 import swal from "sweetalert";
 import AdminRegistration from "../../components/AdminRegistration";
@@ -8,8 +9,6 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [bannedUsers, setBannedUsers] = useState([]);
   // const [removeId,setRemoveId]=useState(null)
-
-  
 
   const handleDeleteClick = async (userId) => {
     // نمایش پنجره تایید با استفاده از SweetAlert و دریافت نتیجه با await
@@ -103,52 +102,6 @@ export default function Users() {
     }
   };
 
-  // function getAllUsers() {
-  //   const localStorageData = JSON.parse(localStorage.getItem("user"));
-
-  //   fetch("http://localhost:4000/v1/users", {
-  //     headers: {
-  //       Authorization: `Bearer ${localStorageData.token}`,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       const filteredUsers = result
-  //         .filter((user) => user.role !== "ADMIN")
-  //         .map((user) => ({
-  //           id: user?._id,
-  //           name: user?.name,
-  //           email: user?.email,
-  //           username: user?.username,
-  //         }));
-  //       setUsers(filteredUsers);
-  //     });
-  // }
-
-  // useEffect(() => {
-  //   const localStorageData = JSON.parse(localStorage.getItem("user"));
-  //   if (localStorageData) {
-  //     fetch("http://localhost:4000/v1/users", {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorageData.token}`,
-  //       },
-  //     })
-  //       .then((res) => res.json())
-  //       .then((result) => {
-  //         const filteredUsers = result
-  //           .filter((user) => user.role !== "ADMIN")
-  //           .map((user) => ({
-  //             id: user?._id,
-  //             name: user?.name,
-  //             email: user?.email,
-  //             username: user?.username,
-  //             phone: user?.phone,
-  //           }));
-  //         setUsers(filteredUsers);
-  //       });
-  //   }
-  // }, [token]);
-
   const getAllUsers = async () => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
 
@@ -172,7 +125,6 @@ export default function Users() {
     setUsers(filteredUsers);
   };
 
-
   useEffect(() => {
     getAllUsers();
   }, [token]);
@@ -183,27 +135,63 @@ export default function Users() {
     setBannedUsers(storedBannedUsers);
   }, []);
 
+  // const tableHead = [
+  //   "نام و نام خانوادگی",
+  //   "ایمیل",
+  //   "شناسه کاربری",
+  //   "شماره ",
+  //   "عملیات",
+  // ];
+
   const tableHead = [
-    "نام و نام خانوادگی",
-    "ایمیل",
-    "شناسه کاربری",
-    "شماره ",
-    "عملیات",
+    { title: "name", label: "نام و نام خانوادگی" },
+    { title: "email", label: "ایمیل" },
+    { title: "username", label: "شناسه کاربری" },
+    { title: "phone", label: "شماره" },
+  ];
+
+  const actions = [
+    {
+      label: "ویرایش",
+      icon: PencilIcon,
+      onClick: (userData) => console.log("Edit:", userData),
+    },
+    {
+      label: "حذف",
+      icon: TrashIcon,
+      onClick: (userData) => handleDeleteClick(userData.id),
+    },
+    {
+      label: "بن",
+      icon: null,
+      onClick: (userData) => handlerBanUser(userData.id),
+      disabledCondition: (userData) => bannedUsers.includes(userData.id),
+    },
   ];
 
   return (
-    <div className="flex flex-col gap-1 rtl font-iransans">
-       <AdminRegistration onUserAdded={getAllUsers} /> 
+    <div className="flex flex-col gap-1 rtl font-iransans rtl">
+      <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
+        ثبت نام کاربران
+      </p>
+      <AdminRegistration onUserAdded={getAllUsers} />
       <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
         لیست کاربران
       </p>
       <MaterialTable
         tableHead={tableHead}
         tableBody={users}
-        handleDeleteClick={handleDeleteClick}
-        handlerBanUser={handlerBanUser}
-        bannedUsers={bannedUsers}
+        actions={actions}
       />
     </div>
   );
 }
+
+
+    // <MaterialTable
+    //     tableHead={tableHead}
+    //     tableBody={users}
+    //     handleDeleteClick={handleDeleteClick}
+    //     handlerBanUser={handlerBanUser}
+    //     bannedUsers={bannedUsers}
+    //   /> 
