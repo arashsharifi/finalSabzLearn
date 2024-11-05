@@ -2,33 +2,14 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "../../components/UI/MaterialTable";
 import swal from "sweetalert";
+import AdminRegistration from "../../components/AdminRegistration";
 export default function Users() {
   const [token, setToken] = useState(false);
   const [users, setUsers] = useState([]);
   const [bannedUsers, setBannedUsers] = useState([]);
   // const [removeId,setRemoveId]=useState(null)
 
-  function getAllUsers() {
-    const localStorageData = JSON.parse(localStorage.getItem("user"));
-
-    fetch("http://localhost:4000/v1/users", {
-      headers: {
-        Authorization: `Bearer ${localStorageData.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        const filteredUsers = result
-          .filter((user) => user.role !== "ADMIN")
-          .map((user) => ({
-            id: user?._id,
-            name: user?.name,
-            email: user?.email,
-            username: user?.username,
-          }));
-        setUsers(filteredUsers);
-      });
-  }
+  
 
   const handleDeleteClick = async (userId) => {
     // نمایش پنجره تایید با استفاده از SweetAlert و دریافت نتیجه با await
@@ -122,28 +103,78 @@ export default function Users() {
     }
   };
 
-  useEffect(() => {
+  // function getAllUsers() {
+  //   const localStorageData = JSON.parse(localStorage.getItem("user"));
+
+  //   fetch("http://localhost:4000/v1/users", {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorageData.token}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       const filteredUsers = result
+  //         .filter((user) => user.role !== "ADMIN")
+  //         .map((user) => ({
+  //           id: user?._id,
+  //           name: user?.name,
+  //           email: user?.email,
+  //           username: user?.username,
+  //         }));
+  //       setUsers(filteredUsers);
+  //     });
+  // }
+
+  // useEffect(() => {
+  //   const localStorageData = JSON.parse(localStorage.getItem("user"));
+  //   if (localStorageData) {
+  //     fetch("http://localhost:4000/v1/users", {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorageData.token}`,
+  //       },
+  //     })
+  //       .then((res) => res.json())
+  //       .then((result) => {
+  //         const filteredUsers = result
+  //           .filter((user) => user.role !== "ADMIN")
+  //           .map((user) => ({
+  //             id: user?._id,
+  //             name: user?.name,
+  //             email: user?.email,
+  //             username: user?.username,
+  //             phone: user?.phone,
+  //           }));
+  //         setUsers(filteredUsers);
+  //       });
+  //   }
+  // }, [token]);
+
+  const getAllUsers = async () => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
-    if (localStorageData) {
-      fetch("http://localhost:4000/v1/users", {
-        headers: {
-          Authorization: `Bearer ${localStorageData.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          const filteredUsers = result
-            .filter((user) => user.role !== "ADMIN")
-            .map((user) => ({
-              id: user?._id,
-              name: user?.name,
-              email: user?.email,
-              username: user?.username,
-              phone: user?.phone,
-            }));
-          setUsers(filteredUsers);
-        });
-    }
+
+    const response = await fetch("http://localhost:4000/v1/users", {
+      headers: {
+        Authorization: `Bearer ${localStorageData.token}`,
+      },
+    });
+
+    const result = await response.json();
+    const filteredUsers = result
+      .filter((user) => user.role !== "ADMIN")
+      .map((user) => ({
+        id: user?._id,
+        name: user?.name,
+        email: user?.email,
+        username: user?.username,
+        phone: user?.phone,
+      }));
+
+    setUsers(filteredUsers);
+  };
+
+
+  useEffect(() => {
+    getAllUsers();
   }, [token]);
 
   useEffect(() => {
@@ -162,6 +193,7 @@ export default function Users() {
 
   return (
     <div className="flex flex-col gap-1 rtl font-iransans">
+       <AdminRegistration onUserAdded={getAllUsers} /> 
       <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
         لیست کاربران
       </p>
