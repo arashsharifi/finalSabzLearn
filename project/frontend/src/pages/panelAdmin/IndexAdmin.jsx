@@ -65,7 +65,7 @@ export default function IndexAdmin() {
       id: 6,
       title: "دسته بندی ها",
       icon: <BiSolidCategory />,
-      link: "",
+      link: "/p-admin/categorys",
       onClick: () => console.log("yoo"),
     },
     {
