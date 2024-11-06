@@ -10,7 +10,9 @@ import InputTextArea from "./UI/InputTextArea";
 import { useForm } from "../hooks/useForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 export default function AdminAddCategoryForm({ onUserAdded }) {
+  
   const localStorageData = JSON.parse(localStorage.getItem("user"));
   const addCategoryAdminHandler = async (e) => {
     e.preventDefault();
