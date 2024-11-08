@@ -19,6 +19,7 @@ import { useForm } from "../../hooks/useForm";
 export default function AdminCategorys() {
   const [categoryData, setCategoryData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [getId,setGetId]=useState('')
   const [formState, onInputsHandler] = useForm(
     {
       title: {
@@ -34,6 +35,26 @@ export default function AdminCategorys() {
   );
 
   const localStorageData = JSON.parse(localStorage.getItem("user"));
+
+  const closeModalAndResetForm = () => {
+    setIsModalOpen(false);
+    setGetId("");
+    onInputsHandler({
+      title: { value: "", isValid: false },
+      name: { value: "", isValid: false },
+    });
+  };
+  const showToastSuccess = (message) => {
+    toast.success(message, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "light",
+    });
+  };
   const getAllCategorys = async () => {
     console.log("localStorageData", localStorageData);
 
@@ -94,12 +115,47 @@ export default function AdminCategorys() {
     }
   };
 
-  // const addEditAdminHandler = () => {
-  //   const editCategoryInfo = {
+
+
+
+
+  // const addEditAdminHandler = async (e) => {
+  //   const newCategoryInfo = {
   //     title: formState.inputs.title.value,
   //     name: formState.inputs.name.value,
   //   };
-  //   console.log("editCategoryInfo", editCategoryInfo);
+  //   console.log("newCategoryInfo", newCategoryInfo);
+  //   console.log("getId", getId);
+  
+  //   try {
+  //     const response = await fetch(`http://localhost:4000/v1/category/${getId}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${localStorageData.token}`,
+  //       },
+  //       body: JSON.stringify(newCategoryInfo),
+  //     });
+  //     if (response.ok) {
+  //       closeModalAndResetForm()
+  //       getAllCategorys();
+  //       showToastSuccess(` 🎈✨ویرایش با موفقیت انجام شد `);
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.log("errorData", errorData);
+  //       toast.error(`${errorData.message}`, {
+  //         position: "top-right",
+  //         autoClose: 4000,
+  //         hideProgressBar: false,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         theme: "light",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
   // };
 
   const addEditAdminHandler = async (e) => {
@@ -108,45 +164,42 @@ export default function AdminCategorys() {
       name: formState.inputs.name.value,
     };
     console.log("newCategoryInfo", newCategoryInfo);
-
+    console.log("getId", getId);
+  
     try {
-      const response = await fetch("http://localhost:4000/v1/category", {
-        method: "POST",
+      const response = await fetch(`http://localhost:4000/v1/category/${getId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorageData.token}`,
+          Authorization: `Bearer ${localStorageData.token}`,
         },
         body: JSON.stringify(newCategoryInfo),
       });
+  
       if (response.ok) {
-        onUserAdded();
-        toast.success(
-          ` 🎈✨   شما با موفقیت ثبت شد`,
-          {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "light",
-          }
-        );
+        closeModalAndResetForm();
+        getAllCategorys();
+  
+        // پیام موفقیت به‌جای toastify
+        await swal("🎈✨ویرایش با موفقیت انجام شد", {
+          icon: "success",
+        });
       } else {
         const errorData = await response.json();
         console.log("errorData", errorData);
-        toast.error(`${errorData.message}`, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
+  
+        // پیام خطا به‌جای toastify
+        await swal(`خطا: ${errorData.message}`, {
+          icon: "error",
         });
       }
     } catch (error) {
       console.error(error);
+  
+      // پیام خطای عمومی به‌جای toastify
+      await swal("خطایی رخ داد. لطفاً دوباره تلاش کنید.", {
+        icon: "error",
+      });
     }
   };
 
@@ -156,7 +209,8 @@ export default function AdminCategorys() {
 
 
   const updateCategory = (categoryId) => {
-    console.log("categoryId", categoryId);
+  
+    setGetId(categoryId)
     setIsModalOpen(true);
   };
 
