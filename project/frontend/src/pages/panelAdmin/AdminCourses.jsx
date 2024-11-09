@@ -4,6 +4,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 export default function AdminCourses() {
   const [courseData, setCourseData] = useState([]);
   const [token, setToken] = useState(false);
+  const localStorageData = JSON.parse(localStorage.getItem("user"));
 
   const statusDictionary = {
     start: "در حال برگزاری",
@@ -13,8 +14,7 @@ export default function AdminCourses() {
 
 
   const getAllCourses = async () => {
-    const localStorageData = JSON.parse(localStorage.getItem("user"));
-    console.log("localStorageData", localStorageData);
+   
 
     const response = await fetch("http://localhost:4000/v1/courses", {
       headers: {
@@ -38,10 +38,58 @@ export default function AdminCourses() {
     setCourseData(filteredCourses);
   };
 
+  const handleDeleteClick = async (courseId) => {
+    console.log("courseId",courseId)
+  
+    const result = await swal({
+      title: "آیا مطمئن به حذف دوره  هستید",
+      text: "دوره را با آره حذف کنید",
+      icon: "warning",
+      buttons: {
+        cancel: "نه",
+        confirm: "آره",
+      },
+      dangerMode: true,
+    });
+    if (result) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/v1/courses/${courseId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorageData.token}`,
+            },
+          }
+        );
+        getAllCourses();
+        if (!response.ok) throw new Error("خطا در حذف دوره");
+        await swal("شما کاربر را حذف کردید", {
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        await swal("خطایی رخ داد، دوره حذف نشد", {
+          icon: "error",
+        });
+      }
+    } else {
+      await swal("عملیات لغو شد", {
+        icon: "info",
+      });
+    }
+  };
+  // const handleDeleteClick =  (courseId) => {
+  //   // console.log("categoryId",courseId)
+
+
+   
+  // };
+
   useEffect(() => {
     getAllCourses();
   }, []);
-  console.log("courseData", courseData);
+  // console.log("courseData", courseData);
   const tableHead = [
     { title: "name", label: "نام دوره" },
     { title: "creator", label: "مدرس" },
@@ -55,13 +103,13 @@ export default function AdminCourses() {
     {
       label: "ویرایش",
       icon: PencilIcon,
-      onClick: (userData) => console.log("Edit:", userData),
+      onClick: (courseData) => console.log(userData),
       bgColor: "bg-customfive", 
     },
     {
       label: "حذف",
       icon: TrashIcon,
-      onClick: (userData) => console.log("Edit:", userData),
+      onClick: (courseData) =>handleDeleteClick(courseData.id),
       bgColor: "bg-error", 
     },
   ];
