@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import MaterialTable from "../../components/UI/MaterialTable";
 import AdminAddCategoryForm from "../../components/AdminAddCategoryForm";
-import swal from "sweetalert";
+// import swal from "sweetalert";
 import Modal from "../../components/UI/Modal";
 
 import {
@@ -19,7 +19,7 @@ import { useForm } from "../../hooks/useForm";
 export default function AdminCategorys() {
   const [categoryData, setCategoryData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [getId,setGetId]=useState('')
+  const [getId, setGetId] = useState("");
   const [formState, onInputsHandler] = useForm(
     {
       title: {
@@ -65,9 +65,10 @@ export default function AdminCategorys() {
     });
 
     const result = await response.json();
-
+    console.log("result", result);
     const formatData = result.map((category) => ({
       id: category._id,
+      name: category.name,
       title: category.title,
     }));
     setCategoryData(formatData);
@@ -115,10 +116,6 @@ export default function AdminCategorys() {
     }
   };
 
-
-
-
-
   // const addEditAdminHandler = async (e) => {
   //   const newCategoryInfo = {
   //     title: formState.inputs.title.value,
@@ -126,7 +123,7 @@ export default function AdminCategorys() {
   //   };
   //   console.log("newCategoryInfo", newCategoryInfo);
   //   console.log("getId", getId);
-  
+
   //   try {
   //     const response = await fetch(`http://localhost:4000/v1/category/${getId}`, {
   //       method: "PUT",
@@ -165,21 +162,24 @@ export default function AdminCategorys() {
     };
     console.log("newCategoryInfo", newCategoryInfo);
     console.log("getId", getId);
-  
+
     try {
-      const response = await fetch(`http://localhost:4000/v1/category/${getId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorageData.token}`,
-        },
-        body: JSON.stringify(newCategoryInfo),
-      });
-  
+      const response = await fetch(
+        `http://localhost:4000/v1/category/${getId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorageData.token}`,
+          },
+          body: JSON.stringify(newCategoryInfo),
+        }
+      );
+
       if (response.ok) {
         closeModalAndResetForm();
         getAllCategorys();
-  
+
         // پیام موفقیت به‌جای toastify
         await swal("🎈✨ویرایش با موفقیت انجام شد", {
           icon: "success",
@@ -187,7 +187,7 @@ export default function AdminCategorys() {
       } else {
         const errorData = await response.json();
         console.log("errorData", errorData);
-  
+
         // پیام خطا به‌جای toastify
         await swal(`خطا: ${errorData.message}`, {
           icon: "error",
@@ -195,7 +195,7 @@ export default function AdminCategorys() {
       }
     } catch (error) {
       console.error(error);
-  
+
       // پیام خطای عمومی به‌جای toastify
       await swal("خطایی رخ داد. لطفاً دوباره تلاش کنید.", {
         icon: "error",
@@ -203,14 +203,8 @@ export default function AdminCategorys() {
     }
   };
 
-
-
-
-
-
   const updateCategory = (categoryId) => {
-  
-    setGetId(categoryId)
+    setGetId(categoryId);
     setIsModalOpen(true);
   };
 
@@ -218,9 +212,28 @@ export default function AdminCategorys() {
     getAllCategorys();
   }, []);
 
+  // const tableHead = [
+  //   { title: "id", label: " ردیف" },
+  //   { title: "title", label: "عنوان" },
+  // ];
+
+  // const actions = [
+  //   {
+  //     label: "ویرایش",
+  //     icon: PencilIcon,
+  //     onClick: (categoryData) => updateCategory(categoryData.id),
+  //   },
+  //   {
+  //     label: "حذف",
+  //     icon: TrashIcon,
+  //     onClick: (categoryData) => handleDeleteClick(categoryData.id),
+  //   },
+  // ];
+
   const tableHead = [
-    { title: "id", label: " ردیف" },
+    { title: "id", label: "ردیف" },
     { title: "title", label: "عنوان" },
+    { title: "name", label: "نام دسته بندی" },
   ];
 
   const actions = [
@@ -228,11 +241,13 @@ export default function AdminCategorys() {
       label: "ویرایش",
       icon: PencilIcon,
       onClick: (categoryData) => updateCategory(categoryData.id),
+      bgColor: "bg-customfive",
     },
     {
       label: "حذف",
       icon: TrashIcon,
       onClick: (categoryData) => handleDeleteClick(categoryData.id),
+      bgColor: "bg-error",
     },
   ];
 
