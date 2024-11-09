@@ -56,11 +56,13 @@ export default function AdminCourses() {
       label: "ویرایش",
       icon: PencilIcon,
       onClick: (userData) => console.log("Edit:", userData),
+      bgColor: "bg-customfive", 
     },
     {
       label: "حذف",
       icon: TrashIcon,
       onClick: (userData) => console.log("Edit:", userData),
+      bgColor: "bg-error", 
     },
   ];
 

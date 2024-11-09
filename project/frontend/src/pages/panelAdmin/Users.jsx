@@ -155,17 +155,20 @@ export default function Users() {
       label: "ویرایش",
       icon: PencilIcon,
       onClick: (userData) => console.log("Edit:", userData),
+      bgColor: "bg-customfive", 
     },
     {
       label: "حذف",
       icon: TrashIcon,
       onClick: (userData) => handleDeleteClick(userData.id),
+      bgColor: "bg-error", 
     },
     {
       label: "بن",
       icon: null,
       onClick: (userData) => handlerBanUser(userData.id),
       disabledCondition: (userData) => bannedUsers.includes(userData.id),
+      bgColor: "bg-error", 
     },
   ];
 

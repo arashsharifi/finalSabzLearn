@@ -49,24 +49,25 @@ export default function MaterialTable({
                   <td className="p-4 w-[15%]">
                     <div className="flex gap-2 items-center justify-between">
                       {actions.map((action, actionIndex) => (
+                    
                         <div
-                          key={actionIndex}
-                          className={`duration-200 flex flex-col items-center justify-center p-2 rounded-md shadow-md cursor-pointer ${
-                            action.disabledCondition && action.disabledCondition(rowData)
-                              ? "cursor-not-allowed bg-greydarko"
-                              : "bg-error hover:shadow-lg"
-                          }`}
-                          onClick={() => action.onClick(rowData)}
+                        key={actionIndex}
+                        className={`duration-200 flex flex-col items-center justify-center p-2 rounded-md shadow-md cursor-pointer ${
+                          action.disabledCondition && action.disabledCondition(rowData)
+                            ? "cursor-not-allowed bg-gray-300"
+                            : `${action.bgColor} hover:shadow-lg`
+                        }`}
+                        onClick={() => action.onClick(rowData)}
+                      >
+                        {action.icon && <action.icon className="h-4 w-4 text-myWhite" />}
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal font-iransans text-myWhite"
                         >
-                          {action.icon && <action.icon className="h-4 w-4 text-myWhite" />}
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal font-iransans text-myWhite"
-                          >
-                            {action.label}
-                          </Typography>
-                        </div>
+                          {action.label}
+                        </Typography>
+                      </div>
                       ))}
                     </div>
                   </td>
@@ -80,4 +81,21 @@ export default function MaterialTable({
   );
 }
 
-
+{/* <div
+key={actionIndex}
+className={`duration-200 flex flex-col items-center justify-center p-2 rounded-md shadow-md cursor-pointer ${
+  action.disabledCondition && action.disabledCondition(rowData)
+    ? "cursor-not-allowed bg-greydarko"
+    : "bg-error hover:shadow-lg"
+}`}
+onClick={() => action.onClick(rowData)}
+>
+{action.icon && <action.icon className="h-4 w-4 text-myWhite" />}
+<Typography
+  variant="small"
+  color="blue-gray"
+  className="font-normal font-iransans text-myWhite"
+>
+  {action.label}
+</Typography>
+</div> */}
