@@ -65,10 +65,10 @@ export default function AdminCategorys() {
     });
 
     const result = await response.json();
-   console.log('result',result)
+    console.log("result", result);
     const formatData = result.map((category) => ({
-      id: category._id,    
-     name:category.name,
+      id: category._id,
+      name: category.name,
       title: category.title,
     }));
     setCategoryData(formatData);
@@ -241,13 +241,13 @@ export default function AdminCategorys() {
       label: "ویرایش",
       icon: PencilIcon,
       onClick: (categoryData) => updateCategory(categoryData.id),
-      bgColor: "bg-customfive", 
+      bgColor: "bg-customfive",
     },
     {
       label: "حذف",
       icon: TrashIcon,
       onClick: (categoryData) => handleDeleteClick(categoryData.id),
-      bgColor: "bg-error", 
+      bgColor: "bg-error",
     },
   ];
 
