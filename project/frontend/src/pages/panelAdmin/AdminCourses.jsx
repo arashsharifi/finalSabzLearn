@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "../../components/UI/MaterialTable";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import AddCourseAdmin from "../../components/AddCourseAdmin";
 export default function AdminCourses() {
   const [courseData, setCourseData] = useState([]);
   const [token, setToken] = useState(false);
@@ -117,6 +118,10 @@ export default function AdminCourses() {
   console.log(courseData);
   return (
     <div className="flex flex-col gap-2 rtl  font-iransans">
+      <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
+             اضافه کردن  دوره جدید 
+      </p>
+      <AddCourseAdmin/>
        <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
           لیست  دوره های مجموعه
       </p>
