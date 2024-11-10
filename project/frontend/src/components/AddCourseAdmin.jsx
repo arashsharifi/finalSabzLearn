@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -36,8 +36,29 @@ const schema = Yup.object().shape({
         ? ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
         : true
     ),
+  categoryID: Yup.string().required("لطفا دسته‌بندی را انتخاب کنید"), // اعتبارسنجی required برای دسته‌بندی
 });
 const AddCourseAdmin = () => {
+  const [categoryData, setCategoryData] = useState([]);
+  const localStorageData = JSON.parse(localStorage.getItem("user"));
+  const getAllCategorys = async () => {
+    console.log("localStorageData", localStorageData);
+
+    const response = await fetch("http://localhost:4000/v1/category", {
+      headers: {
+        Authorization: `Bearer ${localStorageData.token}`,
+      },
+    });
+
+    const result = await response.json();
+    console.log("resultCategory", result);
+    const formatData = result.map((category) => ({
+      id: category._id,
+      name: category.name,
+      title: category.title,
+    }));
+    setCategoryData(formatData);
+  };
   const getInputClass = (name) => {
     return `flex items-center gap-2 w-full p-2 border rounded-md shadow-md shadow-greydark ${
       errors[name]
@@ -60,6 +81,12 @@ const AddCourseAdmin = () => {
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    getAllCategorys();
+  }, []);
+
+  console.log("categoryData", categoryData);
 
   return (
     <form
@@ -91,16 +118,37 @@ const AddCourseAdmin = () => {
           )}
         </div>
       </div>
-
-      <div className="flex flex-col items-start gap-2">
-        <label className="font-semibold">قیمت:</label>
-        <input
-          type="number"
-          placeholder="قیمت"
-          {...register("price")}
-          className={getInputClass("price")}
-        />
-        {errors.price && <p className="text-error">{errors.price.message}</p>}
+      <div className="flex flex-col w-full md:flex-row gap-2">
+        <div className="flex flex-col items-start gap-2 w-full">
+          <label className="font-semibold">دسته‌بندی:</label>
+          <select
+            {...register("categoryID")}
+            className={getInputClass("categoryID")}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              انتخاب دسته‌بندی
+            </option>
+            {categoryData.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+          {errors.categoryID && (
+            <p className="text-error">{errors.categoryID.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col items-start gap-2 w-full">
+          <label className="font-semibold">قیمت:</label>
+          <input
+            type="number"
+            placeholder="قیمت"
+            {...register("price")}
+            className={getInputClass("price")}
+          />
+          {errors.price && <p className="text-error">{errors.price.message}</p>}
+        </div>
       </div>
 
       <div className="flex flex-col items-start gap-2">
