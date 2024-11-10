@@ -121,7 +121,7 @@ export default function AdminCourses() {
       <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
              اضافه کردن  دوره جدید 
       </p>
-      <AddCourseAdmin/>
+      <AddCourseAdmin onCourseAdded={getAllCourses}/>
        <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
           لیست  دوره های مجموعه
       </p>
