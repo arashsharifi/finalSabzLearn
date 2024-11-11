@@ -8,6 +8,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { ImExit } from "react-icons/im";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import { BiSolidCategory } from "react-icons/bi";
+import { MdContactPhone } from "react-icons/md";
 import { Link } from "react-router-dom";
 import TobarAdmin from "./TobarAdmin";
 import { GrArticle } from "react-icons/gr";
@@ -66,6 +67,13 @@ export default function IndexAdmin() {
       title: "دسته بندی ها",
       icon: <BiSolidCategory />,
       link: "/p-admin/categorys",
+      onClick: () => console.log("yoo"),
+    },
+    {
+      id: 6,
+      title: "  ارتباط با ما ",
+      icon: <MdContactPhone />,
+      link: "/p-admin/contacts",
       onClick: () => console.log("yoo"),
     },
     {
