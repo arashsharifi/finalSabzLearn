@@ -37,6 +37,7 @@ const schema = Yup.object().shape({
 });
 const AddCourseAdmin = ({ onCourseAdded }) => {
   const [categoryData, setCategoryData] = useState([]);
+  const [base64, setBase64] = useState("");
   const localStorageData = JSON.parse(localStorage.getItem("user"));
   const getAllCategorys = async () => {
     // console.log("localStorageData", localStorageData);
@@ -76,11 +77,30 @@ const AddCourseAdmin = ({ onCourseAdded }) => {
   });
 
   const onSubmit = async (data) => {
+    const convertToBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    };
+
+    const base64Cover = await convertToBase64(data.file[0]);
+    console.log("cover", data.file[0]);
     const newCourse = {
-      nameCourse: data.nameCourse,
+      name: data.nameCourse,
       categoryID: data.categoryID,
       description: data.description,
-      cover: data.file[0],
+      cover: {
+        data: base64Cover, 
+        mimetype: data.file[0].type, 
+        size: data.file[0].size, 
+      },
       shortName: data.shortName,
       support: data.support,
       price: data.price,
@@ -104,6 +124,7 @@ const AddCourseAdmin = ({ onCourseAdded }) => {
         });
       } else {
         const errorData = await response.json();
+        console.log("errorData", errorData);
 
         await swal(`خطا: ${errorData.message}`, {
           icon: "error",
@@ -207,6 +228,7 @@ const AddCourseAdmin = ({ onCourseAdded }) => {
             type="file"
             {...register("file")}
             className={getInputClass("file")}
+            accept=".png,.svg"
           />
           {errors.file && <p className="text-error">{errors.file.message}</p>}
         </div>
