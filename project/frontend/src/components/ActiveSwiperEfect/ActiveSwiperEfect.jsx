@@ -45,9 +45,10 @@ export default function ActiveSwiperEfect({ dataSwiper }) {
         modules={[EffectCoverflow, Pagination]}
         className="mySwiper active-swiper" // اضافه کردن کلاس خاص
       >
+        {/* item.cover */}
         {dataSwiper.map((item) => (
           <SwiperSlide key={item.id}>
-            <img src={item.cover} onLoad={inImageLoaded} alt={item.name} />
+            <img className="w-full h-[170px]" src={`http://localhost:4000/courses/covers/${item.cover}`} onLoad={inImageLoaded} alt={item.name} />
             {!isLoaderShow && <CircleSpinner />}
             <div className="flex flex-col bg-grey gap-2 w-full h-full rtl p-3">
               <h1 className="self-start text-md font-bold">{item.name}</h1>

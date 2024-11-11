@@ -11,10 +11,11 @@ const schema = Yup.object().shape({
   description: Yup.string()
     .max(90, "توضیحات نباید بیشتر از ۹۰ کاراکتر باشد")
     .required("لطفا همه موارد را پر کنید"),
-  shortName: Yup.string()
+    shortName: Yup.string()
     .min(6, "نام کوتاه باید حداقل ۶ کاراکتر باشد")
     .max(12, "نام کوتاه نباید بیشتر از ۱۲ کاراکتر باشد")
-    .required("لطفا همه موارد را پر کنید"),
+    .matches(/-v2$/, "نام کوتاه باید با -v2 پایان یابد")
+    .required("لطفا همه موارد را پر کنید"), 
   price: Yup.number()
     .typeError("قیمت باید عدد باشد")
     .positive("قیمت باید بیشتر از صفر باشد")
@@ -70,69 +71,108 @@ const AddCourseAdmin = ({ onCourseAdded }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isValid, touchedFields },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit = async (data) => {
-    const convertToBase64 = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          resolve(reader.result);
-        };
-        reader.onerror = (error) => {
-          reject(error);
-        };
-      });
-    };
+  // const onSubmit = async (data) => {
+  //   // const convertToBase64 = (file) => {
+  //   //   return new Promise((resolve, reject) => {
+  //   //     const reader = new FileReader();
+  //   //     reader.readAsDataURL(file);
+  //   //     reader.onload = () => {
+  //   //       resolve(reader.result);
+  //   //     };
+  //   //     reader.onerror = (error) => {
+  //   //       reject(error);
+  //   //     };
+  //   //   });
+  //   // };
 
-    const base64Cover = await convertToBase64(data.file[0]);
-    console.log("cover", data.file[0]);
-    const newCourse = {
-      name: data.nameCourse,
-      categoryID: data.categoryID,
-      description: data.description,
-      cover: {
-        data: base64Cover, 
-        mimetype: data.file[0].type, 
-        size: data.file[0].size, 
-      },
-      shortName: data.shortName,
-      support: data.support,
-      price: data.price,
-      status: data.status,
-    };
+  //   // const base64Cover = await convertToBase64(data.file[0]);
+  //   console.log("cover", data.file[0]);
+  //   const newCourse = {
+  //     name: data.nameCourse,
+  //     categoryID: data.categoryID,
+  //     description: data.description,
+  //     cover:data.file[0],
+  //     shortName: data.shortName,
+  //     support: data.support,
+  //     price: data.price,
+  //     status: data.status,
+  //   };
+
+  //   try {
+  //     const response = await fetch("http://localhost:4000/v1/courses", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorageData.token}`,
+  //       },
+  //       body: JSON.stringify(newCourse),
+  //     });
+
+  //     if (response.ok) {
+  //       onCourseAdded();
+  //       await swal("ثبت دوره با موفقیت انجام شد", {
+  //         icon: "success",
+  //       });
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.log("errorData", errorData);
+
+  //       await swal(`خطا: ${errorData.message}`, {
+  //         icon: "error",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("خطا در اتصال به سرور", error);
+
+  //     await swal("خطا در اتصال به سرور", {
+  //       icon: "error",
+  //     });
+  //   }
+  // };
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+
+    formData.append("name", data.nameCourse);
+    formData.append("categoryID", data.categoryID);
+    formData.append("description", data.description);
+    formData.append("cover", data.file[0]); 
+    formData.append("shortName", data.shortName);
+    formData.append("support", data.support);
+    formData.append("price", data.price);
+    formData.append("status", data.status);
 
     try {
       const response = await fetch("http://localhost:4000/v1/courses", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorageData.token}`,
+          Authorization: `Bearer ${localStorageData.token}`, // Authorization header
         },
-        body: JSON.stringify(newCourse),
+        body: formData, // Use FormData directly as the body
       });
 
       if (response.ok) {
         onCourseAdded();
+        reset();
         await swal("ثبت دوره با موفقیت انجام شد", {
           icon: "success",
         });
       } else {
         const errorData = await response.json();
         console.log("errorData", errorData);
-
         await swal(`خطا: ${errorData.message}`, {
           icon: "error",
         });
       }
     } catch (error) {
       console.error("خطا در اتصال به سرور", error);
-
       await swal("خطا در اتصال به سرور", {
         icon: "error",
       });
