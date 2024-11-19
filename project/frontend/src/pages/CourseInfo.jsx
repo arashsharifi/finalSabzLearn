@@ -46,6 +46,11 @@ export default function CourseInfo() {
   const [Alldata, setAllData] = useState([]);
   const inImageLoaded = () => setIsLoaderShow(true);
   const { courseName } = useParams();
+  const statusDictionary = {
+    start: "در حال برگزاری",
+    completed: "پایان یافته",
+    presell: "پیش فروش  ",
+  };
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -134,6 +139,8 @@ export default function CourseInfo() {
       console.error("Error:", error.message);
     }
   };
+
+  console.log("Alldata", Alldata);
 
   const dataUpdatedAt = Alldata?.updatedAt;
   const dataCreatedAt = Alldata?.createdAt;
@@ -286,11 +293,9 @@ export default function CourseInfo() {
                 <div className="flex flex-col">
                   <p>وضعیت دوره </p>
                   <p className="font-bold text-customfive">
-                    {Alldata?.isComplete === 1 ? (
-                      <p>دوره اتمام گردیده</p>
-                    ) : (
-                      <p className="text-error">دوره تمام نشده</p>
-                    )}
+                    <p className="text-error">
+                      {statusDictionary[Alldata.status]}
+                    </p>
                   </p>
                 </div>
               </div>
@@ -320,7 +325,7 @@ export default function CourseInfo() {
                 </div>
                 <div className="flex flex-col">
                   <p>روش پشتیبانی </p>
-                  <p className="font-bold ">{boxDitals[0].SupportMethod}</p>
+                  <p className="font-bold ">{Alldata.support}</p>
                 </div>
               </div>
             </div>
@@ -389,14 +394,20 @@ export default function CourseInfo() {
               <div className="flex justify-evenly w-[70%] md:w-[50%] lg:w-[60%]">
                 <div className="w-[50%]  flex flex-col gap-2  items-center justify-center p-1">
                   <p className="text-sm lg:text-[17px] whitespace-nowrap">
-                    {Alldata?.creator?.name ? Alldata?.creator?.name : "no person"}
+                    {Alldata?.creator?.name
+                      ? Alldata?.creator?.name
+                      : "no person"}
                   </p>
                   <p className="border-b-2 border-customfour">
                     Front-End developer
                   </p>
                   <div className="border-b-2 border-customfour flex gap-2 mr-4">
                     <p>ایمیل:</p>
-                    <p>{Alldata?.creator?.email ?Alldata?.creator?.email :"nonegmail.com"}</p>
+                    <p>
+                      {Alldata?.creator?.email
+                        ? Alldata?.creator?.email
+                        : "nonegmail.com"}
+                    </p>
                   </div>
                 </div>
                 <div className="w-[90px] h-[120px] border-2 border-customfour overflow-hidden rounded-md">

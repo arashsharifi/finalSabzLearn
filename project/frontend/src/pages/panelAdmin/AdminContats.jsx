@@ -1,17 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { SiAnswer } from "react-icons/si";
+
 import MaterialTable from "../../components/UI/MaterialTable";
 import Modal from "../../components/UI/Modal";
+
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
+const schema = Yup.object().shape({
+  answer: Yup.string()
+    .min(5, "    ۵ کاراکتر باشد")
+    .max(30, "  نباید بیشتر از ۲۰ کاراکتر باشد")
+    .required("لطفا همه موارد را پر کنید"),
+});
 
 export default function AdminContats() {
   const [contacts, setContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [findEmail, setFindEmail] = useState("");
   const [getId, setGetId] = useState("");
   const [findObj, setFindObj] = useState("");
   const name = "arash";
-  const getAllUsers = async () => {
-    const localStorageData = JSON.parse(localStorage.getItem("user"));
+  const localStorageData = JSON.parse(localStorage.getItem("user"));
 
+  const getInputClass = (name) => {
+    return `flex items-center gap-2 w-full p-2 border rounded-md shadow-md shadow-greydark ${
+      errors[name]
+        ? "border-error "
+        : touchedFields[name]
+        ? "border-success "
+        : "border-black"
+    }`;
+  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors, isValid, touchedFields },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
+
+  const getAllUsers = async () => {
     const response = await fetch("http://localhost:4000/v1/contact", {
       headers: {
         Authorization: `Bearer ${localStorageData.token}`,
@@ -19,7 +53,7 @@ export default function AdminContats() {
     });
 
     const result = await response.json();
-    // console.log("result",result)
+    console.log("result",result)
     const filteredContacts = result.map((contact) => ({
       id: contact?._id,
       name: contact?.name,
@@ -31,6 +65,49 @@ export default function AdminContats() {
     setContacts(filteredContacts);
   };
 
+  const AnswerEmailHandler = async (data) => {
+    console.log("data", data);
+
+    const answerUser = {
+      email: findEmail,
+      answer: data.answer,
+    };
+    try {
+      const response = await fetch("http://localhost:4000/v1/contact/answer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorageData.token}`,
+        },
+        body: JSON.stringify(answerUser),
+      });
+
+      if (response.ok) {
+        reset();
+        await swal("پاسخ به ایمیل ارسال شد ", {
+          icon: "success",
+        });
+      } else {
+        const errorData = await response.json();
+        console.log("errorData", errorData);
+        await swal(`خطا: ${errorData.message}`, {
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.error("خطا در اتصال به سرور", error);
+      await swal("خطا در اتصال  پاسخ گویی به ایمیل", {
+        icon: "error",
+      });
+    }
+  };
+
+  const actionEmailHandler = (contactEmail) => {
+    setFindEmail(contactEmail);
+    setIsModalOpen(true);
+    setFindObj("");
+  };
+
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -39,6 +116,7 @@ export default function AdminContats() {
     const contactFind = contacts.find((contact) => contact.id === contactId);
     setFindObj(contactFind);
     setIsModalOpen(true);
+    setFindEmail("");
   };
 
   console.log("findObj", findObj);
@@ -59,9 +137,9 @@ export default function AdminContats() {
       bgColor: "bg-customseven",
     },
     {
-      label: "ویرایش",
-      icon: PencilIcon,
-      onClick: (userData) => console.log("Edit:", userData),
+      label: "پاسخ",
+      icon: SiAnswer,
+      onClick: (contactData) => actionEmailHandler(contactData.email),
       bgColor: "bg-customfive",
     },
 
@@ -90,6 +168,40 @@ export default function AdminContats() {
                 پیامی از: {findObj.name || "ناشناس"}
               </p>
               <p className="mr-6">{findObj.body || "بدون پیام"}</p>
+            </div>
+          )}
+          {findEmail && (
+            <div className="flex flex-col gap-3">
+              <p className="text-lg font-medium text-customfive">
+                ایمیل انتخاب شده برای پاسخ: {findEmail}
+              </p>
+              <form
+                className="flex flex-col gap-2 w-full"
+                onSubmit={handleSubmit(AnswerEmailHandler)}
+              >
+                <div className="flex flex-col items-start gap-2">
+                  <label className="font-semibold">جواب:</label>
+                  <textarea
+                    placeholder="جواب"
+                    {...register("answer")}
+                    className={getInputClass("answer")}
+                  />
+                  {errors.description && (
+                    <p className="text-error">{errors.answer.message}</p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={!isValid}
+                  className={`w-[40%] p-2 rounded-md shadow-md ${
+                    isValid
+                      ? "bg-success text-myWhite"
+                      : "bg-greydarko text-myWhite"
+                  }`}
+                >
+                  پاسخ
+                </button>
+              </form>
             </div>
           )}
         </div>

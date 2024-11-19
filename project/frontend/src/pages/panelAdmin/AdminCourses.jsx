@@ -10,7 +10,7 @@ export default function AdminCourses() {
   const statusDictionary = {
     start: "در حال برگزاری",
     completed: "پایان یافته",
-    pending: "در انتظار",
+    presell: "پیش فروش  ",
   };
 
 
