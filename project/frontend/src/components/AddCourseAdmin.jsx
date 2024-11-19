@@ -137,9 +137,8 @@ const AddCourseAdmin = ({ onCourseAdded }) => {
   //   }
   // };
   const onSubmit = async (data) => {
+    console.log('data',data)
     const formData = new FormData();
-
-
     formData.append("name", data.nameCourse);
     formData.append("categoryID", data.categoryID);
     formData.append("description", data.description);

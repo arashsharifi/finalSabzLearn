@@ -82,7 +82,7 @@ export default function VerticalMouseControl({ dataSwiper }) {
                     <div className="w-full md:w-[40%] h-full  flex items-center justify-center">
                       <img
                         className="w-full h-full object-cover"
-                        src={item.cover}
+                        src={`http://localhost:4000/courses/covers/${item.cover}`}
                         onLoad={inImageLoaded}
                         alt={item.name}
                       />
