@@ -102,6 +102,48 @@ export default function AdminContats() {
     }
   };
 
+  const handleDeleteClick = async (contactId) => {
+  
+
+    const result = await swal({
+      title: "آیا مطمئن به حذف اطلاعات هستید",
+      text: "اطلاعات را با آره حذف کنید",
+      icon: "warning",
+      buttons: {
+        cancel: "نه",
+        confirm: "آره",
+      },
+      dangerMode: true,
+    });
+    if (result) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/v1/contact/${contactId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorageData.token}`,
+            },
+          }
+        );
+        getAllUsers();
+        if (!response.ok) throw new Error("خطا در حذف ارتباط");
+        await swal("شما اطلاعات را حذف کردید", {
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        await swal("خطایی رخ داد، اطلاعات حذف نشد", {
+          icon: "error",
+        });
+      }
+    } else {
+      await swal("عملیات لغو شد", {
+        icon: "info",
+      });
+    }
+  };
+
   const actionEmailHandler = (contactEmail) => {
     setFindEmail(contactEmail);
     setIsModalOpen(true);
@@ -146,7 +188,7 @@ export default function AdminContats() {
     {
       label: "حذف",
       icon: TrashIcon,
-      onClick: (userData) => console.log("ss:", userData),
+      onClick: (contactData) => handleDeleteClick(contactData.id),
       bgColor: "bg-error",
     },
   ];
