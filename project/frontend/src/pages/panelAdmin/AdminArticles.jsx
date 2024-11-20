@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import MaterialTable from '../../components/UI/MaterialTable';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import AddArticleAdmin from '../../components/AddArticleAdmin';
 export default function AdminArticles() {
   const [articledata,setArticleData]=useState(null)
   const localStorageData = JSON.parse(localStorage.getItem("user"));
-
-  const getAllUsers = async () => {
-
+  const getAllArticles = async () => {
     const response = await fetch("http://localhost:4000/v1/articles", {
       headers: {
         Authorization: `Bearer ${localStorageData.token}`,
@@ -19,8 +18,51 @@ export default function AdminArticles() {
       setArticleData(result);
   };
 
+  const handleDeleteClick = async (articleId) => {
+    
+    const result = await swal({
+      title: "آیا مطمئن به حذف کاربر هستید",
+      text: "کاربر را با آره حذف کنید",
+      icon: "warning",
+      buttons: {
+        cancel: "نه",
+        confirm: "آره",
+      },
+      dangerMode: true,
+    });
+    if (result) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/v1/articles/${articleId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorageData.token}`,
+            },
+          }
+        );
+        getAllArticles();
+        if (!response.ok) throw new Error("خطا در حذف کاربر");
+        await swal("شما کاربر را حذف کردید", {
+          icon: "success",
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        await swal("خطایی رخ داد، کاربر حذف نشد", {
+          icon: "error",
+        });
+      }
+    } else {
+      await swal("عملیات لغو شد", {
+        icon: "info",
+      });
+    }
+  };
+
+ 
+
   useEffect(() => {
-    getAllUsers();
+    getAllArticles();
   }, []);
 
   const tableHead = [
@@ -41,7 +83,7 @@ export default function AdminArticles() {
     {
       label: "حذف",
       icon: TrashIcon,
-      onClick: (userData) =>console.log("delete:", userData),
+      onClick: (articleData) =>handleDeleteClick(articleData._id),
       bgColor: "bg-error", 
     },
  
@@ -51,11 +93,12 @@ export default function AdminArticles() {
   return (
     <div className="flex flex-col gap-1 rtl font-iransans rtl">
     <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
-      ثبت نام کاربران
+      افزودن مقاله جدید 
     </p>
+    <AddArticleAdmin onArticleAdded={getAllArticles}/>
     {/* <AdminRegistration onUserAdded={getAllUsers} /> */}
     <p className="text-2xl font-bold   bg-clip-text pb-2 border-b-2 border-customfour mr-10 mt-4 mb-6  w-[90%] mx-auto text-customfour">
-      لیست کاربران
+      لیست مقالات 
     </p>
     <MaterialTable
       tableHead={tableHead}
