@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-
+import { Controller } from "react-hook-form";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import {
   ClassicEditor,
@@ -35,8 +35,8 @@ const schema = Yup.object().shape({
     .max(90, "نام کوتاه نباید بیشتر از ۱۲ کاراکتر باشد")
     .required("لطفا همه موارد را پر کنید"),
   body: Yup.string()
-    .min(20, "نام کوتاه باید حداقل ۶ کاراکتر باشد")
-    .max(140, "نام کوتاه نباید بیشتر از ۱۲ کاراکتر باشد")
+    .min(5, "نام کوتاه باید حداقل ۶ کاراکتر باشد")
+    .max(140, "نام کوتاه نباید بیشتر از 140 کاراکتر باشد")
     .required("لطفا همه موارد را پر کنید"),
   file: Yup.mixed()
     .required("لطفا یک فایل انتخاب کنید")
@@ -56,6 +56,7 @@ export default function AddArticleAdmin({ onArticleAdded }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const editorRef = useRef();
   const localStorageData = JSON.parse(localStorage.getItem("user"));
+
   const getAllCategorys = async () => {
     const response = await fetch("http://localhost:4000/v1/category", {
       headers: {
@@ -72,6 +73,7 @@ export default function AddArticleAdmin({ onArticleAdded }) {
     }));
     setCategoryData(formatData);
   };
+
   const getInputClass = (name) => {
     return `flex items-center gap-2 w-full p-2 border rounded-md shadow-md shadow-greydark ${
       errors[name]
@@ -86,6 +88,9 @@ export default function AddArticleAdmin({ onArticleAdded }) {
     handleSubmit,
     watch,
     reset,
+    setValue,
+    control,
+    value,
     formState: { errors, isValid, touchedFields },
   } = useForm({
     resolver: yupResolver(schema),
@@ -93,7 +98,24 @@ export default function AddArticleAdmin({ onArticleAdded }) {
   });
 
   const onSubmit = async (data) => {
-    // console.log('data',data)
+    const errorsArray = Object.entries(errors).map(([field, error]) => ({
+      field,
+      message: error.message,
+    }));
+
+    if (errorsArray.length > 0) {
+      const errorMessages = errorsArray
+        .map((err) => `فیلد "${err.field}" : ${err.message}`)
+        .join("\n");
+
+      await swal({
+        title: "خطاهای اعتبارسنجی",
+        text: errorMessages,
+        icon: "error",
+      });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("categoryID", data.categoryID);
@@ -101,7 +123,18 @@ export default function AddArticleAdmin({ onArticleAdded }) {
     formData.append("shortName", data.shortName);
     formData.append("body", data.body);
     formData.append("cover", data.file[0]);
+    // console.log("formData", JSON.stringify(formData));
+    // console.log("formData",formData);
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
 
+    //   if (value instanceof File) {
+    //     console.log(
+    //       `File: ${value.name}, Size: ${value.size}, Type: ${value.type}`
+    //     );
+    //   }
+    // }
+    // return "";
     try {
       const response = await fetch("http://localhost:4000/v1/articles", {
         method: "POST",
@@ -245,13 +278,13 @@ export default function AddArticleAdmin({ onArticleAdded }) {
         large={true}
       >
         <div className="flex flex-col gap-3 p-4"></div>
-        <CKEditor
+        {/* <CKEditor
           editor={ClassicEditor}
           config={{
             plugins: [Essentials, Bold, Italic, Paragraph],
             toolbar: ["undo", "redo", "|", "bold", "italic"],
           }}
-          data="<p>تکس خود را وارد نمایید </p>"
+          data={watch("body")}
           // contextItemMetadata={{
           //   name: "editor1",
           //   yourAdditionalData: 2,
@@ -263,10 +296,41 @@ export default function AddArticleAdmin({ onArticleAdded }) {
           //   onChange(editorRef.current?.getData());
           // }}
           onChange={(event, editor) => {
-            const data = editor.getData(); 
-            console.log(data); 
+            const data = editor.getData();
+            // console.log(data);
+            setValue("body", data);
           }}
+        /> */}
+        <Controller
+          name="body"
+          control={control} // اضافه کردن این خط برای اتصال فرم به react-hook-form
+          defaultValue=""
+          rules={{
+            required: "متن مقاله الزامی است",
+            minLength: {
+              value: 5,
+              message: "حداقل طول متن باید ۵ کاراکتر باشد",
+            },
+            maxLength: {
+              value: 140,
+              message: "حداکثر طول متن باید 140 کاراکتر باشد",
+            },
+          }}
+          render={({ field }) => (
+            <CKEditor
+              editor={ClassicEditor}
+              config={{
+                plugins: [Essentials, Bold, Italic, Paragraph],
+                toolbar: ["undo", "redo", "|", "bold", "italic"],
+              }}
+              data={field.value}
+              onChange={(event, editor) => {
+                field.onChange(editor.getData());
+              }}
+            />
+          )}
         />
+        {errors.body && <p className="text-error">{errors.body.message}</p>}
       </Modal>
     </div>
   );
