@@ -33,7 +33,7 @@ export default function CourseBox({ courseData }) {
       <div className="w-[98%]  mx-auto rounded-lg z-20">
         <img
           className="w-full h-auto rounded-lg"
-          src={courseData?.cover}
+          src={`http://localhost:4000/courses/covers/${courseData.cover}`}
           alt="nooot"
           onLoad={inImageLoaded}
         />

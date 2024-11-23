@@ -58,7 +58,7 @@ export default function ActiveSwiper({ dataSwiper }) {
             <div className="w-full h-[60%] md:h-[50%] mx-auto overflow-hidden ">
               <img
                 className="w-full h-full "
-                src={item?.cover}
+                src={`http://localhost:4000/courses/covers/${item.cover}`}
                 alt="noot"
                 onLoad={inImageLoaded}
               />
