@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function Modal({ isOpen, onClose, children }) {
+export default function Modal({ isOpen, onClose, children, large }) {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -9,13 +9,15 @@ export default function Modal({ isOpen, onClose, children }) {
     } else setShowModal(false);
   }, [isOpen]);
 
+  const modalWidth = large ? "w-[100%] xl:w-[80%]" : "w-[60%] xl:w-[40%]";
+
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ease-in-out">
           {/* پس‌زمینه مدال */}
           <div
-            className={`relative bg-myWhite p-6 rounded-lg shadow-lg w-[60%] xl:w-[40%]  transition-transform duration-300 ease-in-out transform ${
+            className={`relative bg-myWhite p-6 rounded-lg shadow-lg ${modalWidth} transition-transform duration-300 ease-in-out transform ${
               showModal ? "scale-100 opacity-100" : "scale-90 opacity-0"
             }`}
           >

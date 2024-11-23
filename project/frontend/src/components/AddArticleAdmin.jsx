@@ -1,7 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+} from "ckeditor5";
+import { SlashCommand } from "ckeditor5-premium-features";
+
+import "ckeditor5/ckeditor5.css";
+import "ckeditor5-premium-features/ckeditor5-premium-features.css";
+
+import Modal from "./UI/Modal";
 
 const schema = Yup.object().shape({
   title: Yup.string()
@@ -34,8 +51,10 @@ const schema = Yup.object().shape({
   categoryID: Yup.string().required("لطفا دسته‌بندی را انتخاب کنید"), // اعتبارسنجی required برای دسته‌بندی
 });
 
-export default function AddArticleAdmin({onArticleAdded}) {
+export default function AddArticleAdmin({ onArticleAdded }) {
   const [categoryData, setCategoryData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const editorRef = useRef();
   const localStorageData = JSON.parse(localStorage.getItem("user"));
   const getAllCategorys = async () => {
     const response = await fetch("http://localhost:4000/v1/category", {
@@ -194,6 +213,12 @@ export default function AddArticleAdmin({onArticleAdded}) {
             <p className="text-error">{errors.description.message}</p>
           )}
         </div>
+        <button
+          className={`w-[30%] p-2 rounded-md shadow-md ${"bg-customfive text-myWhite"}`}
+          onClick={() => setIsModalOpen(true)}
+        >
+          تکس ادیتور
+        </button>
         <div className="flex flex-col items-start gap-2">
           <label className="font-semibold">توضیحات:</label>
           <textarea
@@ -214,6 +239,35 @@ export default function AddArticleAdmin({onArticleAdded}) {
           ارسال
         </button>
       </form>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        large={true}
+      >
+        <div className="flex flex-col gap-3 p-4"></div>
+        <CKEditor
+          editor={ClassicEditor}
+          config={{
+            plugins: [Essentials, Bold, Italic, Paragraph],
+            toolbar: ["undo", "redo", "|", "bold", "italic"],
+          }}
+          data="<p>Hello from the first editor working with the context!</p>"
+          contextItemMetadata={{
+            name: "editor1",
+            yourAdditionalData: 2,
+          }}
+          onReady={(editor) => {
+            console.log("Editor 1 is ready to use!", editor);
+          }}
+          // onChange={() => {
+          //   onChange(editorRef.current?.getData());
+          // }}
+          onChange={(event, editor) => {
+            const data = editor.getData(); 
+            console.log(data); 
+          }}
+        />
+      </Modal>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MaterialTable from '../../components/UI/MaterialTable';
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import AddArticleAdmin from '../../components/AddArticleAdmin';
+
 export default function AdminArticles() {
   const [articledata,setArticleData]=useState(null)
   const localStorageData = JSON.parse(localStorage.getItem("user"));
@@ -105,6 +106,7 @@ export default function AdminArticles() {
       tableBody={articledata}
       actions={actions}
     />
+   
   </div>
   )
 }
