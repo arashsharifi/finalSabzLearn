@@ -91,8 +91,8 @@ export default function MaterialTable({
   };
 
   return (
-    <Card className="h-full w-[95%] mx-auto p-2 shadow-xl overflow-x-scroll overflow-y-scroll font-iransans">
-      <div className="overflow-y-scroll scrollbar-none" style={{ maxHeight: "400px" }}>
+    <Card className="h-full w-[95%] mx-auto p-2 shadow-xl overflow-x-scroll overflow-y-scroll  no-scrollbar font-iransans">
+      <div className="overflow-y-scroll scrollbar-none no-scrollbar" style={{ maxHeight: "400px" }}>
         <table className="w-full min-w-max table-fixed text-left">
           <thead>
             <tr>

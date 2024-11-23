@@ -219,7 +219,7 @@ export default function AddArticleAdmin({ onArticleAdded }) {
         >
           تکس ادیتور
         </button>
-        <div className="flex flex-col items-start gap-2">
+        {/* <div className="flex flex-col items-start gap-2">
           <label className="font-semibold">توضیحات:</label>
           <textarea
             placeholder="متن مقاله"
@@ -227,7 +227,7 @@ export default function AddArticleAdmin({ onArticleAdded }) {
             className={getInputClass("body")}
           />
           {errors.body && <p className="text-error">{errors.body.message}</p>}
-        </div>
+        </div> */}
 
         <button
           type="submit"
@@ -251,14 +251,14 @@ export default function AddArticleAdmin({ onArticleAdded }) {
             plugins: [Essentials, Bold, Italic, Paragraph],
             toolbar: ["undo", "redo", "|", "bold", "italic"],
           }}
-          data="<p>Hello from the first editor working with the context!</p>"
-          contextItemMetadata={{
-            name: "editor1",
-            yourAdditionalData: 2,
-          }}
-          onReady={(editor) => {
-            console.log("Editor 1 is ready to use!", editor);
-          }}
+          data="<p>تکس خود را وارد نمایید </p>"
+          // contextItemMetadata={{
+          //   name: "editor1",
+          //   yourAdditionalData: 2,
+          // }}
+          // onReady={(editor) => {
+          //   console.log("Editor 1 is ready to use!", editor);
+          // }}
           // onChange={() => {
           //   onChange(editorRef.current?.getData());
           // }}
