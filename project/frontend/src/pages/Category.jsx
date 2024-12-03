@@ -47,8 +47,11 @@ export default function Category() {
           }
         );
         const result = await response.json();
-        if (result) {
-          setCategoryDatas(result);
+        const filteredCourses = result.filter((course) =>
+          course.shortName.endsWith("-v2")
+        );
+        if (filteredCourses) {
+          setCategoryDatas(filteredCourses);
         }
       } catch (error) {
         console.error(error);

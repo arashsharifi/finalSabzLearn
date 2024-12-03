@@ -13,29 +13,29 @@ export default function CoursesAll() {
   const [serachTrem, setSearchTrem] = useState("");
   const [dataAllCourse,setDataAllCourse] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+
+  const fetchCourseData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("user")).token;
+      const response = await fetch(`http://localhost:4000/v1/courses`, {
+        headers: {
+          Authorization: `Bearer ${token === null ? null : token}`,
+        },
+      });
+      const result = await response.json();
+
+      // اعمال فیلتر برای دوره‌هایی که shortName آن‌ها با "-v2" تمام می‌شود
+      const filteredData = result.filter((item) =>
+        item.shortName.endsWith("-v2")
+      );
+
+      setDataAllCourse(filteredData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const fetchCourseData = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem("user")).token;
-        const response = await fetch(
-          `http://localhost:4000/v1/courses`,
-          {
-            headers: {
-              Authorization: `Bearer ${token === null ? null : token}`,
-            },
-          }
-        );
-        const result = await response.json();
-        console.log(result);
-        if (result) {
-          setDataAllCourse(result);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchCourseData();
-   
   }, []);
   console.log(typeof dataAllCourse)
 

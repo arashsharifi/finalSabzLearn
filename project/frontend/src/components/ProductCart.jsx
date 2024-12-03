@@ -27,7 +27,7 @@ export default function ProductCart({ data }) {
       <div className="w-full h-[60%] md:h-[50%] mx-auto overflow-hidden ">
         <img
           className="w-full h-full "
-          src={data.cover}
+          src={`http://localhost:4000/courses/covers/${data.cover}`}
           alt="noot"
           onLoad={inImageLoaded}
         />

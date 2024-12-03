@@ -5,7 +5,7 @@ import SectionHeader from "./SectionHeader";
 import { lasCourseData } from "../data";
 
 export default function PresellCourses() {
-  const [presellData,setPresellData]=useState(null)
+  const [presellData, setPresellData] = useState(null);
   useEffect(() => {
     const fetchPresellData = async () => {
       try {
@@ -19,9 +19,12 @@ export default function PresellCourses() {
           }
         );
         const result = await response.json();
-  
-        if (result) {
-                setPresellData(result)
+        const filteredCourses = result.filter((course) =>
+          course.shortName.endsWith("-v2")
+        );
+
+        if (filteredCourses) {
+          setPresellData(filteredCourses);
         }
       } catch (error) {
         console.error(error);
@@ -38,7 +41,15 @@ export default function PresellCourses() {
         btnTitle="مشاهده"
       />
 
-      <ActiveSwiper dataSwiper={presellData} />
+      {presellData === null ? (
+        <p>در حال بارگذاری...</p>
+      ) : presellData.length === 0 ? (
+        <p className="text-center text-customeeleven border border-customeeleven rounded-md mt-10 mx-auto w-[90%] font-bold text-xl p-3">
+          موردی یافت نشد
+        </p>
+      ) : (
+        <ActiveSwiper dataSwiper={presellData} />
+      )}
     </div>
   );
 }
